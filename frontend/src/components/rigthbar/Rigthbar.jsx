@@ -10,31 +10,31 @@ export default function Rigthbar() {
     {
       id: 1,
       name: "Alice Johnson",
-      avatar: "../../.././public/assets/person/7.jpeg",
+      avatar: "../../.././assets/person/7.jpeg",
       isOnline: true,
     },
     {
       id: 2,
       name: "Bob Smith",
-      avatar: "../../.././public/assets/person/2.jpeg",
+      avatar: "../../.././assets/person/2.jpeg",
       isOnline: false,
     },
     {
       id: 3,
       name: "Charlie Brown",
-      avatar: "../../.././public/assets/person/3.jpeg",
+      avatar: "../../.././assets/person/3.jpeg",
       isOnline: true,
     },
     {
       id: 4,
       name: "Diana Prince",
-      avatar: "../../.././public/assets/person/4.jpeg",
+      avatar: "../../.././assets/person/4.jpeg",
       isOnline: false,
     },
     {
       id: 5,
       name: "Ethan Hunt",
-      avatar: "../../.././public/assets/person/5.jpeg",
+      avatar: "../../.././assets/person/5.jpeg",
       isOnline: true,
     },
   ];
