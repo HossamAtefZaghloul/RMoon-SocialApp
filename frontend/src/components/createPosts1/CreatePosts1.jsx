@@ -3,7 +3,7 @@ import axios from "axios";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import CreatePost from "../PostPage/PostPage.jsx";
 import Posts from "../Posts/Posts.jsx";
-
+import useFetch from "../customHooks/UseFetch.jsx";
 const server = "http://localhost:5000/";
 
 export default function CreatePosts() {
@@ -12,26 +12,18 @@ export default function CreatePosts() {
   const [userPost, setUserPosts] = useState([]);
   const token = localStorage.getItem("token");
 
+  const { isLoading, data, error } = useFetch(
+    "http://localhost:5000/api/users/me/posts",
+    token
+  );
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:5000/api/users/me/posts",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUserPosts(res.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
+    if (data) {
+      setUserPosts(data);
+    }
+  }, [data]);
 
-    fetchPosts();
-  }, [token]);
-
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
   return (
     <main className="flex-1 p-6 w-full h-full">
       <div className="max-w-3xl mx-auto">
