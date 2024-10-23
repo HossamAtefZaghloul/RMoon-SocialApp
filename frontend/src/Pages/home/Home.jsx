@@ -1,21 +1,9 @@
-import { React, useContext } from "react";
+import {} from "react";
 import Navbar from "../../components/navbar/Navbar.jsx";
 import Sidebar from "../../components/sidebar/Sidebar.jsx";
 import Rigthbar from "../../components/rigthbar/Rigthbar.jsx";
 import MainContent from "../../components/main/MainContent.jsx";
-import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 const Home = () => {
-  const { user } = useContext(UserContext);
-  console.log(user);
-  async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/users/${userId}/posts`
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  };
   return (
     <div className="bg-[#18191A] sm:w-full sm:h-full  w-[115vh] h-full">
       <div>

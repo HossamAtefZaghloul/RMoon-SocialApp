@@ -1,5 +1,4 @@
-import { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import { useState, useContext, useEffect, useMemo } from "react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import CreatePost from "../PostPage/PostPage.jsx";
 import Posts from "../Posts/Posts.jsx";
@@ -22,8 +21,14 @@ export default function CreatePosts() {
     }
   }, [data]);
 
+  // Memoize Posts component to avoid re-rendering unless userPost changes
+  const memoizedPosts = useMemo(() => {
+    return <Posts posts={userPost} />;
+  }, [userPost]);
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+
   return (
     <main className="flex-1 p-6 w-full h-full">
       <div className="max-w-3xl mx-auto">
@@ -68,9 +73,7 @@ export default function CreatePosts() {
           </div>
         )}
 
-        <div>
-          <Posts posts={userPost} /> {/* Pass the fetched posts here */}
-        </div>
+        <div>{memoizedPosts}</div>
       </div>
     </main>
   );
