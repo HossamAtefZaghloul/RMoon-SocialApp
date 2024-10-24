@@ -7,14 +7,14 @@ export default function Posts({ posts }) {
   const server = "http://localhost:5000/";
 
   return (
-    <main className="flex-1 p-6 w-full h-full">
-      <div className="flex flex-col items-center space-y-6">
+    <main className=" w-full h-full">
+      <div className="flex flex-col items-center gap-5">
         {[...posts].reverse().map((post, index) => (
           <div
             key={index}
-            className="bg-[#242526] rounded-lg shadow p-6 w-full sm:w-[500px]"
+            className="bg-[#242526] rounded-lg shadow p-6 w-full sm:w-[600px] "
           >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-4  ">
               <img
                 src={server + user.image}
                 alt="User Avatar"
@@ -26,12 +26,19 @@ export default function Posts({ posts }) {
                   <TimeAgo eventTime={post.timeAgo} />
                 </p>
               </div>
+              <div className="flex justify-end w-full">
+                <p className="text-gray-400 text-xl font-mono font-extrabold ">
+                  x
+                </p>
+              </div>
             </div>
-            <p className="mb-4 text-white">{post.content}</p>
+            <p className="flex items-center justify-items-center mb-4 text-white">
+              {post.content}
+            </p>
             {post.image && ( // Render the image if it exists
-              <div className="sm:w-[450px] sm:h-[400px]">
+              <div className="max-w-full max-h-full">
                 <img
-                  className="h-full w-full rounded"
+                  className="h-auto w-auto rounded"
                   src={server + post.image}
                   alt=""
                 />
