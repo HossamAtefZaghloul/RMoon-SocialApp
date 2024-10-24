@@ -1,4 +1,4 @@
-import User1 from '../models/User1.js'; 
+import  { User } from '../models/User.js'; 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -9,7 +9,7 @@ export const login = async (req, res) => {
 
     try {
         
-        const user = await User1.findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.json("InvalidEmail");
         }
@@ -24,7 +24,7 @@ export const login = async (req, res) => {
         
         const tokenData = {
             time: Date(),
-            userId: user.userId
+            userId: user._id
         };
 
         const token = jwt.sign(tokenData, jwtSecretKey, { expiresIn: '1h' });
@@ -37,7 +37,7 @@ export const login = async (req, res) => {
                 email: user.email,
                 username: user.username, 
                 image: user.image,
-                userId: user.userId
+                userId: user.UserId
             }
         });
 

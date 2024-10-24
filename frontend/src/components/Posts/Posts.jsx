@@ -1,10 +1,27 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import axios from "axios";
 import { PlusCircle, Image } from "lucide-react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import TimeAgo from "../TimeAgo/TimeAgo.jsx";
 export default function Posts({ posts }) {
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
+  const [postID, setPostID] = useState("");
+
+  const handlePostDelete = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/Posts/${postID}`
+      );
+      console.log("Success:", response.data);
+    } catch (error) {
+      console.error(
+        "Error deleting resource:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
 
   return (
     <main className=" w-full h-full">
@@ -20,16 +37,22 @@ export default function Posts({ posts }) {
                 alt="User Avatar"
                 className="w-[50px] h-[50px] rounded-full mr-3 border border-green-500"
               />
-              <div>
+              <div className="flex flex-col w-full">
                 <p className="font-semibold text-white">{user.username}</p>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-400 ">
                   <TimeAgo eventTime={post.timeAgo} />
                 </p>
               </div>
               <div className="flex justify-end w-full">
-                <p className="text-gray-400 text-xl font-mono font-extrabold ">
-                  x
-                </p>
+                <button
+                  onClick={() => {
+                    setPostID(post._id);
+                  }}
+                >
+                  <p className="text-gray-400 text-xl font-mono font-extrabold">
+                    x
+                  </p>
+                </button>
               </div>
             </div>
             <p className="flex items-center justify-items-center mb-4 text-white">

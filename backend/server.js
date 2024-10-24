@@ -8,7 +8,8 @@ import fs from 'fs';
 import { fileURLToPath } from 'url'; 
 import { signUp } from './controller/handleSignup.js';  
 import { login } from './controller/handleLogin.js';  
-import { posts }from './controller/handlePosts.js';  
+import { createPost }from './controller/handlePosts.js';  
+import { deletePosts }from './controller/deletePosts.js';  
 import { DisplayingPosts } from './controller/DisplayingPosts.js';
 import jwt from 'jsonwebtoken';
 
@@ -55,7 +56,7 @@ const upload = multer({ storage });
 ///
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];  // Ensure token is passed in the Authorization header
-
+``
   if (!authHeader) {
     return res.status(401).json({ message: 'Token not provided' }); // Token not provided
   }
@@ -75,5 +76,6 @@ const authenticateToken = (req, res, next) => {
 // routess
 app.post('/SignUp', upload.single('image'), signUp); 
 app.post('/login',upload.none(), login);
-app.post('/createpost',upload.single('image'), posts);
+app.post('/createpost',upload.single('image'), createPost);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
+// app.delete(`/Posts/${postID}`,deletePosts);

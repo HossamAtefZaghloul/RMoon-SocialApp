@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import Textarea from "@mui/joy/Textarea";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import axios from "axios";
 import "react-quill/dist/quill.snow.css";
@@ -10,7 +9,7 @@ export default function PostPage() {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const { user } = useContext(UserContext);
-  const userId = user.userId;
+  const userId = user.id;
   const timeAgo = new Date();
   const storedData = localStorage.getItem("token");
   const token = storedData; // next taaaaaaaaaaaaaaaaskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
@@ -48,9 +47,9 @@ export default function PostPage() {
           },
         }
       );
-      if (res.data === "newPost") {
+      if (res.data === "New post created") {
         window.location.reload();
-      } else console.log("fail");
+      } else console.log(res.data.message);
     } catch (e) {
       console.log(e);
     }

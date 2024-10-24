@@ -1,30 +1,34 @@
-import User1 from '../models/User1.js'; 
+import {User} from '../models/User.js'; 
+import {Post} from '../models/Posts.js';
 
-export const posts = async (req, res) => {
+export const createPost = async (req, res) => {
     try {
-        const image =  req.file.path.substring(req.file.path.indexOf("public\\"));
-        const { content, userId, timeAgo} = req.body; 
-        console.log(content, userId, timeAgo, image)
+        const image = req.file ? req.file.path.substring(req.file.path.indexOf("public\\")) : null;
+        const { content, userId, timeAgo } = req.body;
+        
         if (!userId) {
             return res.status(400).json({ message: "User ID is required" });
         }
 
-        const newPost = {content, timeAgo, image};
-        console.log('ss')
-        // Update the user with the new post
-        const updatedUser = await User1.findOneAndUpdate(
-            { userId: userId },  // Match based on the custom userId field
-            { $push: { "posts": newPost } },  // Push new post into posts array
-            { new: true }  // Return the updated document
-        );
-        console.log('ss')
-
-        if (!updatedUser) {
+        const user = await User.findById(userId);
+        if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        return res.status(200).json('newPost'); 
+        const post = new Post({
+            user: userId,
+            content: content,
+            timeAgo: timeAgo,
+            image: image,
+        });
+
+
+        await post.save();
+        // console.log('Post created');
+
+        return res.json("New post created");
     } catch (error) {
+        console.error('Error creating post:', error);
         return res.status(500).json({ message: "Server error", error: error.message });
     }
 };
