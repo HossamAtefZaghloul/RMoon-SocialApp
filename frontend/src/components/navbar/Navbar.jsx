@@ -1,5 +1,5 @@
-import { React, useContext } from "react";
-import { Bell, Home, MessageCircle, Search, User, LogOut } from "lucide-react";
+import { useContext } from "react";
+import { Bell, Search, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 export default function CompactNavbar() {
