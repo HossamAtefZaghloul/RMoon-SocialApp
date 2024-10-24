@@ -24,9 +24,12 @@ const UserSchema = new mongoose.Schema({
         content: {
             type :String
        },
-        image: {
+       timeAgo: {
             type: String,
       },
+       image: {
+            type: String,
+  },
     }],
 });
 

@@ -10,7 +10,8 @@ export default function PostPage() {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
+  const userId = user.userId;
+  const timeAgo = new Date();
   const storedData = localStorage.getItem("token");
   const token = storedData; // next taaaaaaaaaaaaaaaaskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
 
@@ -29,14 +30,14 @@ export default function PostPage() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData();
 
     formData.append("content", content);
     formData.append("image", image);
-    const userId = user.userId;
     formData.append("userId", userId);
-    console.log("Submitting post:", { content, image, userId });
+    formData.append("timeAgo", timeAgo);
+
+    console.log("Submitting post:", { content, image, userId, timeAgo });
     try {
       const res = await axios.post(
         "http://localhost:5000/createpost",

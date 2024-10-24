@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import { PlusCircle, Image } from "lucide-react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
-
+import TimeAgo from "../TimeAgo/TimeAgo.jsx";
 export default function Posts({ posts }) {
-  // console.log(posts);
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
 
@@ -23,7 +22,9 @@ export default function Posts({ posts }) {
               />
               <div>
                 <p className="font-semibold text-white">{user.username}</p>
-                <p className="text-sm text-gray-400">2 min ago</p>
+                <p className="text-sm text-gray-400">
+                  <TimeAgo eventTime={post.timeAgo} />
+                </p>
               </div>
             </div>
             <p className="mb-4 text-white">{post.content}</p>

@@ -3,13 +3,13 @@ import User1 from '../models/User1.js';
 export const posts = async (req, res) => {
     try {
         const image =  req.file.path.substring(req.file.path.indexOf("public\\"));
-        const { content, userId } = req.body; 
-        console.log(content,userId,image)
+        const { content, userId, timeAgo} = req.body; 
+        console.log(content, userId, timeAgo, image)
         if (!userId) {
             return res.status(400).json({ message: "User ID is required" });
         }
 
-        const newPost = { content, image };
+        const newPost = {content, timeAgo, image};
         console.log('ss')
         // Update the user with the new post
         const updatedUser = await User1.findOneAndUpdate(
