@@ -63,7 +63,7 @@ export default function CreatePosts() {
             onClick={() => {
               setCreatP(false);
             }}
-            className="fixed inset-0 z-10 flex justify-center items-center bg-opacity-90 bg-black"
+            className="fixed inset-0 z-[999999] flex justify-center items-center bg-opacity-90 bg-black"
           >
             <div onClick={(e) => e.stopPropagation()}>
               <CreatePost className="w-full h-auto" />
