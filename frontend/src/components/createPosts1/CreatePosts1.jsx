@@ -54,9 +54,9 @@ export default function CreatePosts() {
           </div>
 
           <div className="flex gap-5 pt-3 m-1 justify-center w-full">
-            <img src="../../.././public/1.png" alt="Option 1" />
-            <img src="../../.././public/2.png" alt="Option 2" />
-            <img src="../../.././public/3.png" alt="Option 3" />
+            <img src="/1.png" alt="Option 1" />
+            <img src="/2.png" alt="Option 2" />
+            <img src="/3.png" alt="Option 3" />
           </div>
         </div>
 
@@ -65,10 +65,10 @@ export default function CreatePosts() {
             onClick={() => {
               setCreatP(false);
             }}
-            className="absolute inset-0 z-10 flex justify-center items-center bg-opacity-90 bg-black"
+            className="fixed inset-0 z-10 flex justify-center items-center bg-opacity-90 bg-black"
           >
             <div onClick={(e) => e.stopPropagation()}>
-              <CreatePost className="w-full" />
+              <CreatePost className="w-full h-auto" />
             </div>
           </div>
         )}

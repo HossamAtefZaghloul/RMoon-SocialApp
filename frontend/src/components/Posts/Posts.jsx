@@ -4,8 +4,10 @@ import { PlusCircle, Image } from "lucide-react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import TimeAgo from "../TimeAgo/TimeAgo.jsx";
 export default function Posts({ posts }) {
+  console.log(posts);
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
+  const [deletePage, setDeletePage] = useState(false);
   const [postID, setPostID] = useState("");
 
   const handlePostDelete = async (e) => {
@@ -45,16 +47,52 @@ export default function Posts({ posts }) {
               </div>
               <div className="flex justify-end w-full">
                 <button
+                  className="text-gray-400 text-xl font-mono font-extrabold"
                   onClick={() => {
-                    setPostID(post._id);
+                    setDeletePage(true);
                   }}
                 >
-                  <p className="text-gray-400 text-xl font-mono font-extrabold">
-                    x
-                  </p>
+                  x
                 </button>
               </div>
             </div>
+            {deletePage && (
+              <div
+                onClick={() => {
+                  setDeletePage(false);
+                }}
+                className="fixed inset-0 z-10 flex justify-center items-center bg-opacity-[0.03] bg-black"
+              >
+                <div
+                  className="flex items-center justify-center flex-col gap-8 bg-[#18191A] h-[150px] w-[500px] p-4 m-2 rounded-lg "
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-red-800">
+                    ARE YOU SURE YOU WANT TO DELETE THIS POST
+                  </p>
+                  <div className="flex gap-5 items-center justify-center">
+                    <button
+                      onClick={() => {
+                        setPostID(post._id);
+                        console.log(postID);
+                      }}
+                      className=" text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800 "
+                    >
+                      YES
+                    </button>
+                    <button
+                      onClick={() => {
+                        setDeletePage(false);
+                      }}
+                      className=" text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800"
+                    >
+                      NO
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <p className="flex items-center justify-items-center mb-4 text-white">
               {post.content}
             </p>
