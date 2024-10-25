@@ -27,7 +27,7 @@ const TimeAgo = ({ eventTime }) => {
     return () => clearInterval(interval); // Cleanup on unmount
   }, [eventTime]);
 
-  return <p className="text-sm text-gray-400">{timeAgo}</p>;
+  return <span className="text-sm text-gray-400">{timeAgo}</span>;
 };
 
 export default TimeAgo;

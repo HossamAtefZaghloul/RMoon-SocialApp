@@ -78,4 +78,4 @@ app.post('/SignUp', upload.single('image'), signUp);
 app.post('/login',upload.none(), login);
 app.post('/createpost',upload.single('image'), createPost);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
-// app.delete(`/Posts/${postID}`,deletePosts);
+app.delete('/Posts/:postID',deletePosts);

@@ -12,7 +12,7 @@ export default function PostPage() {
   const userId = user.id;
   const timeAgo = new Date();
   const storedData = localStorage.getItem("token");
-  const token = storedData; // next taaaaaaaaaaaaaaaaskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+  const token = storedData; // next TASK
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

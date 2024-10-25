@@ -20,15 +20,13 @@ export default function CreatePosts() {
       setUserPosts(data);
     }
   }, [data]);
-
-  // Memoize Posts component to avoid re-rendering unless userPost changes
+  console.log(data);
   const memoizedPosts = useMemo(() => {
     return <Posts posts={userPost} />;
   }, [userPost]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
+  if (isLoading) console.log(isLoading);
+  if (error) console.log(error);
   return (
     <main className="flex-1 p-6 w-full h-full">
       <div className="max-w-3xl mx-auto">
