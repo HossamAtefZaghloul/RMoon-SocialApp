@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import axios from "axios";
-import { PlusCircle, Image } from "lucide-react";
+import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import TimeAgo from "../TimeAgo/TimeAgo.jsx";
 
@@ -48,7 +48,7 @@ export default function Posts({ posts }) {
               </div>
               <div className="flex justify-end w-full">
                 <button
-                  className="text-gray-400 text-xl font-mono font-extrabold"
+                  className="text-red-800 text-xl font-mono font-extrabold"
                   onClick={() => {
                     setPostID(post._id); // Set the post ID to the state
                     setDeletePage(true); // Open delete confirmation dialog
@@ -106,14 +106,18 @@ export default function Posts({ posts }) {
                 />
               </div>
             )}
-            <div className="flex items-center space-x-4 pt-2">
-              <button className="flex items-center text-white hover:text-red-700">
-                <PlusCircle className="h-5 w-5 mr-1" />
+            <div className="flex justify-between p-1 mt-3">
+              <button className="flex items-center text-red-800 hover:text-red-900">
+                <Heart className="w-5 h-5 mr-1" />
                 Like
               </button>
-              <button className="flex items-center text-white hover:text-red-700">
-                <Image className="h-5 w-5 mr-1" />
+              <button className="flex items-center text-red-800 hover:text-red-900">
+                <MessageCircle className="w-5 h-5 mr-1" />
                 Comment
+              </button>
+              <button className="flex items-center text-red-800 hover:text-red-900">
+                <Share2 className="w-5 h-5 mr-1" />
+                Share
               </button>
             </div>
           </div>

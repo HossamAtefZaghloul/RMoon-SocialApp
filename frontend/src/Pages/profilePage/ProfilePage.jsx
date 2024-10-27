@@ -1,4 +1,3 @@
-import {} from "react";
 import Navbar from "../../components/navbar/Navbar";
 import Rigthbar from "../../components/rigthbar/Rigthbar";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -13,7 +12,7 @@ export default function ProfilePage() {
         <div className="flex-[2] sticky h-[calc(100vh-58px)] top-[58px] ">
           <Sidebar />
         </div>
-        <div className=" h-full  flex-[5] flex flex-col items-center ">
+        <div className=" h-full  flex-[6] flex flex-col items-center ">
           <Profile />
         </div>
         <div className=" flex-[2]  ">

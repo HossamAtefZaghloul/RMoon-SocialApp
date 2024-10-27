@@ -6,7 +6,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     // Retrieve user data from localStorage, or set to null if not found
     const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+    return storedUser ? JSON.parse(storedUser) : [];
   });
 
   useEffect(() => {

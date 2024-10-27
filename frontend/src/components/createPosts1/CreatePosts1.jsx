@@ -3,13 +3,15 @@ import { UserContext } from "../useContexts/UserProvider.jsx";
 import CreatePost from "../PostPage/PostPage.jsx";
 import Posts from "../Posts/Posts.jsx";
 import useFetch from "../customHooks/UseFetch.jsx";
-const server = "http://localhost:5000/";
+import { PostsContext } from "../../components/useContexts/PostProvider.jsx";
 
 export default function CreatePosts() {
   const [creatP, setCreatP] = useState(false);
   const { user } = useContext(UserContext);
   const [userPost, setUserPosts] = useState([]);
   const token = localStorage.getItem("token");
+  const server = "http://localhost:5000/";
+  const { setPosts } = useContext(PostsContext);
 
   const { isLoading, data, error } = useFetch(
     "http://localhost:5000/api/users/me/posts",
@@ -18,6 +20,7 @@ export default function CreatePosts() {
   useEffect(() => {
     if (data) {
       setUserPosts(data);
+      setPosts(data);
     }
   }, [data]);
   console.log(data);

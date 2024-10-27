@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import UserSearch from "../Search/Search.jsx";
 
-export default function CompactNavbar() {
+export default function CompactNavbar(x) {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";

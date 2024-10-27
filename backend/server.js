@@ -11,6 +11,7 @@ import { login } from './controller/handleLogin.js';
 import { createPost }from './controller/handlePosts.js';  
 import { deletePosts }from './controller/deletePosts.js';  
 import { DisplayingPosts } from './controller/DisplayingPosts.js';
+import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
 
 const app = express(); 
@@ -79,3 +80,24 @@ app.post('/login',upload.none(), login);
 app.post('/createpost',upload.single('image'), createPost);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
 app.delete('/Posts/:postID',deletePosts);
+
+
+app.post("/profilepic", upload.single("image"), async (req, res) => {
+  try {    
+    const {userId } = req.body;
+    console.log(userId)
+    console.log("ghff")
+    const image = req.file.path.substring(req.file.path.indexOf("public\\"));
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePicture: image}, 
+      { new: true } 
+    );
+
+    res.status(200).json(updatedUser.
+      profilePicture);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating profile picture", error });
+  }
+});

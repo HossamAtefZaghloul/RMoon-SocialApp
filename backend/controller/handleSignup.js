@@ -8,7 +8,6 @@ export const signUp = async (req, res) => {
     }
 
     const image = req.file.path.substring(req.file.path.indexOf("public\\"));
-    console.log("req.file: ", req.file); 
 
     const { email, password, username } = req.body;
 
