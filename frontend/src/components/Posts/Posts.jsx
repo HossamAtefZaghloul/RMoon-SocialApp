@@ -1,14 +1,31 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import TimeAgo from "../TimeAgo/TimeAgo.jsx";
+import useFetch from "../customHooks/UseFetch.jsx";
 
-export default function Posts({ posts }) {
+export default function Posts() {
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
   const [deletePage, setDeletePage] = useState(false);
   const [postID, setPostID] = useState("");
+  const [posts, setPosts] = useState([]);
+  const token = localStorage.getItem("token");
+
+  const { isLoading, data, error } = useFetch(
+    "http://localhost:5000/api/users/me/posts",
+    token
+  );
+  useEffect(() => {
+    if (data) {
+      setPosts(data);
+    }
+  }, [data]);
+  console.log(data);
+
+  if (isLoading) console.log(isLoading);
+  if (error) console.log(error);
 
   const handlePostDelete = async (e) => {
     e.preventDefault();
@@ -17,13 +34,15 @@ export default function Posts({ posts }) {
         `http://localhost:5000/Posts/${postID}`
       );
       console.log("Success:", response.data);
+      // Update posts in the state after successful deletion
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
+      setDeletePage(false);
     } catch (error) {
       console.error(
         "Error deleting resource:",
         error.response ? error.response.data : error.message
       );
     }
-    window.location.reload();
   };
 
   return (
@@ -36,12 +55,12 @@ export default function Posts({ posts }) {
           >
             <div className="flex items-center mb-4">
               <img
-                src={server + user.image}
+                src={server + (user?.image || "default-avatar.png")}
                 alt="User Avatar"
                 className="w-[50px] h-[50px] rounded-full mr-3 border border-green-500"
               />
               <div className="flex flex-col w-full">
-                <p className="font-semibold text-white">{user.username}</p>
+                <p className="font-semibold text-white">{user?.username}</p>
                 <p className="text-sm text-gray-400">
                   <TimeAgo eventTime={post.timeAgo} />
                 </p>
@@ -50,8 +69,8 @@ export default function Posts({ posts }) {
                 <button
                   className="text-red-800 text-xl font-mono font-extrabold"
                   onClick={() => {
-                    setPostID(post._id); // Set the post ID to the state
-                    setDeletePage(true); // Open delete confirmation dialog
+                    setPostID(post._id);
+                    setDeletePage(true);
                   }}
                 >
                   x
@@ -59,40 +78,39 @@ export default function Posts({ posts }) {
               </div>
             </div>
 
-            {deletePage &&
-              postID === post._id && ( // Check if the current post ID matches the delete page
+            {deletePage && postID === post._id && (
+              <div
+                onClick={() => {
+                  setDeletePage(false);
+                }}
+                className="fixed inset-0 z-10 flex justify-center items-center bg-opacity-30 bg-black"
+              >
                 <div
-                  onClick={() => {
-                    setDeletePage(false);
-                  }}
-                  className="fixed inset-0 z-10 flex justify-center items-center bg-opacity-[0.03] bg-black"
+                  className="flex items-center justify-center flex-col gap-8 bg-[#18191A] h-[150px] w-[500px] p-4 m-2 rounded-lg"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <div
-                    className="flex items-center justify-center flex-col gap-8 bg-[#18191A] h-[150px] w-[500px] p-4 m-2 rounded-lg"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <p className="text-red-800">
-                      ARE YOU SURE YOU WANT TO DELETE THIS POST
-                    </p>
-                    <div className="flex gap-5 items-center justify-center">
-                      <button
-                        onClick={handlePostDelete} // Call the delete function
-                        className="text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800"
-                      >
-                        YES
-                      </button>
-                      <button
-                        onClick={() => {
-                          setDeletePage(false);
-                        }}
-                        className="text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800"
-                      >
-                        NO
-                      </button>
-                    </div>
+                  <p className="text-red-800">
+                    ARE YOU SURE YOU WANT TO DELETE THIS POST
+                  </p>
+                  <div className="flex gap-5 items-center justify-center">
+                    <button
+                      onClick={handlePostDelete}
+                      className="text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800"
+                    >
+                      YES
+                    </button>
+                    <button
+                      onClick={() => {
+                        setDeletePage(false);
+                      }}
+                      className="text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800"
+                    >
+                      NO
+                    </button>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
             <p className="flex items-center justify-items-center mb-4 text-white">
               {post.content}

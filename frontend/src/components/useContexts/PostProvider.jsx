@@ -8,7 +8,7 @@ export const PostsProvider = ({ children }) => {
     return storedPosts ? JSON.parse(storedPosts) : null;
   });
   useEffect(() => {
-    if (posts.length > 0) {
+    if (posts) {
       localStorage.setItem("posts", JSON.stringify(posts));
     } else {
       localStorage.removeItem("posts");

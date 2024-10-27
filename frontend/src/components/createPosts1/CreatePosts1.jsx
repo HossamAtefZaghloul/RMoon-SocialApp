@@ -1,35 +1,17 @@
-import { useState, useContext, useEffect, useMemo } from "react";
+import { useState, useContext, useMemo } from "react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import CreatePost from "../PostPage/PostPage.jsx";
 import Posts from "../Posts/Posts.jsx";
-import useFetch from "../customHooks/UseFetch.jsx";
-import { PostsContext } from "../../components/useContexts/PostProvider.jsx";
 
 export default function CreatePosts() {
   const [creatP, setCreatP] = useState(false);
   const { user } = useContext(UserContext);
-  const [userPost, setUserPosts] = useState([]);
-  const token = localStorage.getItem("token");
   const server = "http://localhost:5000/";
-  const { setPosts } = useContext(PostsContext);
 
-  const { isLoading, data, error } = useFetch(
-    "http://localhost:5000/api/users/me/posts",
-    token
-  );
-  useEffect(() => {
-    if (data) {
-      setUserPosts(data);
-      setPosts(data);
-    }
-  }, [data]);
-  console.log(data);
   const memoizedPosts = useMemo(() => {
-    return <Posts posts={userPost} />;
-  }, [userPost]);
+    return <Posts />;
+  }, []);
 
-  if (isLoading) console.log(isLoading);
-  if (error) console.log(error);
   return (
     <main className="flex-1 p-6 w-full h-full">
       <div className="max-w-3xl mx-auto">
