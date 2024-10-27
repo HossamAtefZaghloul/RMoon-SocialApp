@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Search, User, Loader, UserPlus, X } from "lucide-react";
-
 const fetchUsers = async (query, limit = 10) => {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
   // API call to your backend with query and limit parameters

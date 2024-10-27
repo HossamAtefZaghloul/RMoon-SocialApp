@@ -74,7 +74,7 @@ export default function PostPage() {
             }}
             color="danger"
             minRows={2}
-            placeholder="What is in your mind Hos."
+            placeholder={"What is in your mind " + user.username + "."}
             size="lg"
             variant="outlined"
           />

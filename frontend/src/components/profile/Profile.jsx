@@ -1,7 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import { PostsContext } from "../../components/useContexts/PostProvider.jsx";
-import { MessageCircle, UserPlus, Settings, Camera } from "lucide-react";
+import {
+  MessageCircle,
+  UserPlus,
+  Settings,
+  Camera,
+  ImageUp,
+} from "lucide-react";
 import axios from "axios";
 import Posts from "../Posts/Posts.jsx";
 
@@ -64,6 +70,13 @@ export default function Profile() {
             alt="Profile Background"
             className="w-full h-full object-cover"
           />
+          <button
+            onClick={handleSubmit}
+            className="absolute bottom-2 right-12 bg-[#18191A] p-2 rounded-full shadow-md"
+          >
+            <ImageUp className="w-5 h-5 text-red-800" />
+          </button>
+
           <div className="absolute bottom-2 right-2 bg-[#18191A] p-2 rounded-full shadow-md">
             <Camera className="w-5 h-5 text-red-800" />
             <input
@@ -73,7 +86,6 @@ export default function Profile() {
             />
           </div>
         </div>
-        <button onClick={handleSubmit}>Upload</button>
         <div className="p-4">
           <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-20 sm:-mt-16 mb-4 sm:mb-0">
             <div className="w-32 h-32 rounded-full border-[4px] border-red-900 overflow-hidden bg-gray-200 z-10">
@@ -131,9 +143,9 @@ export default function Profile() {
               </button>
             </div>
           </div>
-          <p className="mt-4 text-white">
-            Professional dog walker and animal lover. Living life one paw at a
-            time! 🐾
+          <p className=" flex items-center mt-4 text-white">
+            Red pow
+            <img className=" w-6 h-5" src="../../.././public/23.png" alt="" />
           </p>
         </div>
         <div>
