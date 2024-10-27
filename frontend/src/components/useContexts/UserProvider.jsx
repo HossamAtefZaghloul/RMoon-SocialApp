@@ -10,11 +10,10 @@ export const UserProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    // Save user data to localStorage whenever it changes
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
     } else {
-      localStorage.removeItem("user"); // Clear storage when user is null (on logout)
+      localStorage.removeItem("user");
     }
   }, [user]);
 

@@ -5,7 +5,7 @@ import Home from "./Pages/home/Home.jsx";
 import "./app.css";
 import ProtectedRoute from "./components/ProtectedRoute.js";
 import { UserProvider } from "./components/useContexts/UserProvider.jsx"; // Import UserProvider
-
+import ProfilePage from "./Pages/profilePage/ProfilePage.jsx";
 function App() {
   return (
     <UserProvider>
@@ -19,6 +19,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profilepage"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

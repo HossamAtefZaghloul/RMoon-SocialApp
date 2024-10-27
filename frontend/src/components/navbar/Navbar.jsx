@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { Bell, Search, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Bell, LogOut } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import UserSearch from "../Search/Search.jsx";
 
@@ -44,11 +44,13 @@ export default function CompactNavbar() {
               className="flex
             items-center gap-2 justify-center"
             >
-              <img
-                className="w-10 h-10 rounded-full"
-                src={server + user.image}
-                alt="profilePicture"
-              />
+              <Link to="/profilepage">
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src={server + user.image}
+                  alt="profilePicture"
+                />
+              </Link>
               <span className="text-white">{user.username}</span>
             </div>
             <div className=" text-white flex gap-2  ml-12 items-center">

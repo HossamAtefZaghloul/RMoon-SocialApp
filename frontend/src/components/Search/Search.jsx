@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
 import { Search, User, Loader, UserPlus, X } from "lucide-react";
-const fetchUsers = async (query) => {
+
+const fetchUsers = async (query, limit = 10) => {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
-  // T API call to your backend
-  return [
+  // API call to your backend with query and limit parameters
+  const allUsers = [
     { id: 1, name: "Alice Johnson", email: "alice@example.com" },
     { id: 2, name: "Bob Smith", email: "bob@example.com" },
     { id: 3, name: "Charlie Brown", email: "charlie@example.com" },
-  ].filter((user) => user.name.toLowerCase().includes(query.toLowerCase()));
+    // Add more users if needed for testing
+  ];
+
+  return allUsers
+    .filter((user) => user.name.toLowerCase().includes(query.toLowerCase()))
+    .slice(0, limit); // Limit the number of results
 };
 
 export default function UserSearch() {
