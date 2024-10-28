@@ -12,6 +12,8 @@ import { createPost }from './controller/handlePosts.js';
 import { deletePosts }from './controller/deletePosts.js';  
 import { DisplayingPosts } from './controller/DisplayingPosts.js';
 import { fetchUsers } from './controller/fetchUsers.js';
+import { GetUsers } from './controller/GetUsers.js';
+
 import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
 
@@ -80,10 +82,10 @@ app.post('/SignUp', upload.single('image'), signUp);
 app.post('/login',upload.none(), login);
 app.post('/createpost',upload.single('image'), createPost);
 app.get('/api/users', authenticateToken, fetchUsers);
+app.get('/search/users', authenticateToken, GetUsers);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
 app.delete('/Posts/:postID',deletePosts);
 
-z
 app.post("/profilepic", upload.single("image"), async (req, res) => {
   try {    
     const {userId } = req.body;

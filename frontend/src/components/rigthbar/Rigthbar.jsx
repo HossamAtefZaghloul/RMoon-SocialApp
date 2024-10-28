@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Search, Users } from "lucide-react";
 import useFetch from "../customHooks/UseFetch.jsx";
-
+import "./rightbar.css";
 export default function Rightbar() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
@@ -18,7 +18,7 @@ export default function Rightbar() {
   }, [data]);
 
   // Mock online status if not provided by the API
-  const onlineUsers = new Set(["admin", "ahmedAli"]); // Example usernames that are online
+  const onlineUsers = new Set(["admin"]); // Example usernames that are online
   const filteredFriends = allUsers.filter(
     (friend) =>
       friend.username.toLowerCase().includes(query.toLowerCase()) &&
@@ -28,7 +28,7 @@ export default function Rightbar() {
   );
 
   return (
-    <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px]">
+    <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px] ">
       <div className="p-4">
         <h2 className="text-xl font-semibold text-white mb-4">Friends</h2>
         <div className="relative">
@@ -76,17 +76,17 @@ export default function Rightbar() {
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto sidebar ">
         <ul className="space-y-2">
           {filteredFriends.map((friend) => (
             <li
-              key={friend._id} // Use _id as the unique key
+              key={friend._id}
               className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg"
             >
               <div className="flex items-center">
                 <div className="relative">
                   <img
-                    src={server + friend.image} // Assuming image field exists
+                    src={server + friend.image}
                     alt={friend.username}
                     className="w-[35px] h-[35px] rounded-full"
                   />

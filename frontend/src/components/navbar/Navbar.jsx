@@ -3,7 +3,6 @@ import { Bell, LogOut } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import UserSearch from "../Search/Search.jsx";
-
 export default function CompactNavbar(x) {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -27,7 +26,7 @@ export default function CompactNavbar(x) {
           </div>
 
           <div className="w-[600px] ml-12">
-            <UserSearch />
+            <UserSearch userss={user} />
           </div>
 
           <div className="flex items-center gap-5 lg:ml-6">

@@ -10,13 +10,13 @@ const Home = () => {
         <Navbar />
 
         <div className=" flex h-full">
-          <div className="flex-[2] sticky h-[calc(100vh-58px)] top-[58px] ">
+          <div className="flex-[2] sticky h-[calc(100vh-58px)] top-[58px]  ">
             <Sidebar />
           </div>
           <div className="w-[480px] h-full  flex-[3.5] flex flex-col items-center ">
             <MainContent />
           </div>
-          <div className=" flex-[2]  ">
+          <div className=" flex-[2]">
             <Rigthbar />
           </div>
         </div>
