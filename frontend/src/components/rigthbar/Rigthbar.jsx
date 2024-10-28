@@ -1,63 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Users } from "lucide-react";
+import useFetch from "../customHooks/UseFetch.jsx";
 
-export default function Rigthbar() {
-  const [searchTerm, setSearchTerm] = useState("");
+export default function Rightbar() {
+  const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
+  const [allUsers, setAllUsers] = useState([]);
+  const server = "http://localhost:5000/";
 
-  // Mock friend data
-  const friends = [
-    {
-      id: 1,
-      name: "Alice Johnson",
-      avatar: "../../.././assets/person/7.jpeg",
-      isOnline: true,
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      avatar: "../../.././assets/person/5.webp",
-      isOnline: false,
-    },
-    {
-      id: 3,
-      name: "Charlie Brown",
-      avatar: "../../.././assets/person/8.jpg",
-      isOnline: true,
-    },
-    {
-      id: 4,
-      name: "Diana Prince",
-      avatar: "../../.././assets/person/4.png",
-      isOnline: false,
-    },
-    {
-      id: 5,
-      name: "Ethan Hunt",
-      avatar: "../../.././assets/person/1.jpg",
-      isOnline: true,
-    },
-  ];
+  const token = localStorage.getItem("token");
+  const { data } = useFetch("http://localhost:5000/api/users", token);
 
-  const filteredFriends = friends.filter(
+  useEffect(() => {
+    if (data) {
+      setAllUsers(data);
+    }
+  }, [data]);
+
+  // Mock online status if not provided by the API
+  const onlineUsers = new Set(["admin", "ahmedAli"]); // Example usernames that are online
+  const filteredFriends = allUsers.filter(
     (friend) =>
-      friend.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      friend.username.toLowerCase().includes(query.toLowerCase()) &&
       (filter === "all" ||
-        (filter === "online" && friend.isOnline) ||
-        (filter === "offline" && !friend.isOnline))
+        (filter === "online" && onlineUsers.has(friend.username)) ||
+        (filter === "offline" && !onlineUsers.has(friend.username)))
   );
 
   return (
-    <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px] ">
+    <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px]">
       <div className="p-4">
         <h2 className="text-xl font-semibold text-white mb-4">Friends</h2>
         <div className="relative">
           <input
             type="text"
             placeholder="Search friends..."
-            className=" bg-[#242526] w-full pl-10 pr-4 py-2 border border-[#242526] rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            className="bg-[#242526] w-full pl-10 pr-4 py-2 border border-[#242526] rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
         </div>
@@ -100,28 +80,30 @@ export default function Rigthbar() {
         <ul className="space-y-2">
           {filteredFriends.map((friend) => (
             <li
-              key={friend.id}
-              className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200  rounded-lg "
+              key={friend._id} // Use _id as the unique key
+              className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg"
             >
               <div className="flex items-center">
                 <div className="relative">
                   <img
-                    src={friend.avatar}
-                    alt={friend.name}
-                    className="w-[35px] h-[35px]  rounded-full"
+                    src={server + friend.image} // Assuming image field exists
+                    alt={friend.username}
+                    className="w-[35px] h-[35px] rounded-full"
                   />
                   <span
                     className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-                      friend.isOnline ? "bg-green-500" : "bg-gray-400"
+                      onlineUsers.has(friend.username)
+                        ? "bg-green-500"
+                        : "bg-gray-400"
                     }`}
                   ></span>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-red-700 ">
-                    {friend.name}
+                  <p className="text-sm font-medium text-red-700">
+                    {friend.username}
                   </p>
                   <p className="text-xs text-gray-500">
-                    {friend.isOnline ? "Online" : "Offline"}
+                    {onlineUsers.has(friend.username) ? "Online" : "Offline"}
                   </p>
                 </div>
               </div>

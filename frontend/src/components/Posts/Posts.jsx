@@ -22,7 +22,7 @@ export default function Posts() {
       setPosts(data);
     }
   }, [data]);
-  console.log(data);
+  // console.log(data);
 
   if (isLoading) console.log(isLoading);
   if (error) console.log(error);

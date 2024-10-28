@@ -11,6 +11,7 @@ import { login } from './controller/handleLogin.js';
 import { createPost }from './controller/handlePosts.js';  
 import { deletePosts }from './controller/deletePosts.js';  
 import { DisplayingPosts } from './controller/DisplayingPosts.js';
+import { fetchUsers } from './controller/fetchUsers.js';
 import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
 
@@ -78,10 +79,11 @@ const authenticateToken = (req, res, next) => {
 app.post('/SignUp', upload.single('image'), signUp); 
 app.post('/login',upload.none(), login);
 app.post('/createpost',upload.single('image'), createPost);
+app.get('/api/users', authenticateToken, fetchUsers);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
 app.delete('/Posts/:postID',deletePosts);
 
-
+z
 app.post("/profilepic", upload.single("image"), async (req, res) => {
   try {    
     const {userId } = req.body;
@@ -101,3 +103,9 @@ app.post("/profilepic", upload.single("image"), async (req, res) => {
     res.status(500).json({ message: "Error updating profile picture", error });
   }
 });
+
+
+
+
+
+
