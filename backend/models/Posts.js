@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import mongooseSequence from "mongoose-sequence";
 
 const AutoIncrement = mongooseSequence(mongoose);
-
-const PostSchema = new mongoose.Schema({
+const { Schema } = mongoose; 
+const PostSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',  // Reference the User model

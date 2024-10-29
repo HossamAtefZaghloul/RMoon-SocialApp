@@ -12,4 +12,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ["jwt-decode"],  // Force Vite to optimize this dependency
+  },
 });

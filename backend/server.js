@@ -13,7 +13,7 @@ import { deletePosts }from './controller/deletePosts.js';
 import { DisplayingPosts } from './controller/DisplayingPosts.js';
 import { fetchUsers } from './controller/fetchUsers.js';
 import { GetUsers } from './controller/GetUsers.js';
-
+import { handle_friend_request } from './controller/HandleFriends/friendRequest.js';
 import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
 
@@ -59,22 +59,21 @@ const upload = multer({ storage });
 
 ///
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];  // Ensure token is passed in the Authorization header
+  const authHeader = req.headers['authorization'];
 ``
   if (!authHeader) {
-    return res.status(401).json({ message: 'Token not provided' }); // Token not provided
+    return res.status(401).json({ message: 'Token not provided' });
   }
 
-  const token = authHeader.split(' ')[1]; // Token is usually "Bearer <token>"
+  const token = authHeader.split(' ')[1]; 
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decodedToken) => {
     if (err) {
-      return res.status(403).json({ message: 'Invalid or expired token' }); // Token verification failed
+      return res.status(403).json({ message: 'Invalid or expired token' }); 
     }
 
-    // decodedToken contains the payload set during token generation
-    req.user = decodedToken; // Attach user data to the request object
-    next(); // Move to the next middleware or route handler
+    req.user = decodedToken;
+    next(); 
   });
 };
 // routess
@@ -85,6 +84,7 @@ app.get('/api/users', authenticateToken, fetchUsers);
 app.get('/search/users', authenticateToken, GetUsers);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
 app.delete('/Posts/:postID',deletePosts);
+app.post('/api/friendrequest', handle_friend_request);
 
 app.post("/profilepic", upload.single("image"), async (req, res) => {
   try {    

@@ -1,12 +1,51 @@
 import { useState, useEffect } from "react";
-import { Search, User, Loader, UserPlus, X } from "lucide-react";
+import {
+  Search,
+  User,
+  Loader,
+  UserPlus,
+  X,
+  UserX,
+  UserCheck,
+} from "lucide-react";
+import axios from "axios";
 import useFetch from "../customHooks/UseFetch.jsx";
+import jwt_decode from "jwt-decode";
 
 export default function UserSearch() {
   const [query, setQuery] = useState("");
+  const [addUser, setAddUser] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
-  const limit = 5; //maximum search results
+  const [userB, setUserB] = useState("");
+  const limit = 4; //maximum search results :3><
   const token = localStorage.getItem("token");
+  const tokenData = jwt_decode(token);
+  const userA = tokenData.userId;
+
+  const handleAdd = (b_id) => {
+    setUserB(b_id);
+  };
+
+  useEffect(() => {
+    if (!userB) return;
+
+    const sendFriendRequest = async () => {
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/friendrequest",
+          {
+            userA,
+            userB,
+          }
+        );
+        console.log("Friend request sent:", res);
+      } catch (e) {
+        console.log("Error sending friend request:", e);
+      }
+    };
+
+    sendFriendRequest();
+  }, [userB]);
 
   const { data, isLoading, error } = useFetch(
     "http://localhost:5000/api/users",
@@ -77,11 +116,35 @@ export default function UserSearch() {
                 <p className="font-medium text-white">{user.username}</p>
                 <p className="text-sm text-gray-500">{user.email}</p>
               </div>
-              <div className="flex justify-end w-full text-red-800">
-                <button>
-                  <UserPlus />
-                </button>
-              </div>
+              {addUser ? (
+                <div className="flex justify-end w-full text-red-700">
+                  <button
+                    onClick={() => {
+                      setAddUser(!addUser);
+                    }}
+                  >
+                    <UserPlus />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex justify-end w-full gap-2">
+                  <button
+                    onClick={() => {
+                      handleAdd(user._id);
+                      setAddUser(true);
+                    }}
+                  >
+                    <UserCheck className=" text-red-700" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAddUser(true);
+                    }}
+                  >
+                    <UserX className=" text-red-700" />
+                  </button>
+                </div>
+              )}
             </li>
           ))}
         </ul>

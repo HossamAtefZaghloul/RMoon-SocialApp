@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useFetch = (url, token) => {
+const useFetch = (url, header) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!url || !token) return;
+      if (!url || !header) return;
       try {
         const res = await axios.get(url, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${header}`,
           },
         });
         setData(res.data);
@@ -20,7 +20,7 @@ const useFetch = (url, token) => {
       }
     };
     fetchData();
-  }, [url, token]);
+  }, [url, header]);
 
   return { data, error };
 };

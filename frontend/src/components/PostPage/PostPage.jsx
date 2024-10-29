@@ -4,7 +4,7 @@ import { UserContext } from "../useContexts/UserProvider.jsx";
 import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 
-export default function PostPage() {
+export default function PostPage(setPostPage) {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -22,7 +22,7 @@ export default function PostPage() {
       setImagePreview(imagePreviewUrl);
       return () => {
         if (imagePreview) {
-          URL.revokeObjectURL(imagePreview);
+          setPostPage(false);
         }
       };
     }

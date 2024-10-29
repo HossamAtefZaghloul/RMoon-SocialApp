@@ -3,6 +3,7 @@ import { Bell, LogOut, UserCheck, UserX } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import UserSearch from "../Search/Search.jsx";
+import useFetch from "../customHooks/UseFetch.jsx";
 
 export default function CompactNavbar() {
   const navigate = useNavigate();
@@ -10,6 +11,11 @@ export default function CompactNavbar() {
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
   console.log(user.image);
+
+  // const { data, isLoading, error } = useFetch(
+  //   "http://localhost:5000/api/users",
+  //   header
+  // );
   return (
     <div className=" bg-[#18191A] sticky top-0 z-50 bg-cover bg-center shadow border-b border-gray-700  sm:w-full sm:h-full   ">
       <div className="   mx-auto px-2 sm:px-4 lg:px-8">
@@ -28,7 +34,7 @@ export default function CompactNavbar() {
           </div>
 
           <div className="w-[600px] ml-12">
-            <UserSearch userss={user} />
+            <UserSearch />
           </div>
 
           <div className="flex items-center gap-5 lg:ml-6">

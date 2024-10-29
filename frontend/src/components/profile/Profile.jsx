@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
-import { PostsContext } from "../../components/useContexts/PostProvider.jsx";
 import {
   MessageCircle,
   UserPlus,
@@ -16,7 +15,6 @@ export default function Profile() {
   const [followerCount, setFollowerCount] = useState(1234);
   const server = "http://localhost:5000/";
   const { user } = useContext(UserContext);
-  const { Post } = useContext(PostsContext);
   const [file, setFile] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
 

@@ -1,10 +1,10 @@
 import { useState, useContext, useMemo } from "react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
-import CreatePost from "../PostPage/PostPage.jsx";
+import PostPage from "../PostPage/PostPage.jsx";
 import Posts from "../Posts/Posts.jsx";
 
 export default function CreatePosts() {
-  const [creatP, setCreatP] = useState(false);
+  const [handlePostPage, setHandlePostPage] = useState(false);
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
 
@@ -24,7 +24,7 @@ export default function CreatePosts() {
             />
             <input
               onClick={() => {
-                setCreatP(true);
+                setHandlePostPage(true);
               }}
               className="cursor-pointer text-slate-300 bg-[#3A3B3C] p-2 pl-4 m-2 rounded-full w-full"
               placeholder={`What's on your mind, ${user.username}?`}
@@ -43,15 +43,18 @@ export default function CreatePosts() {
           </div>
         </div>
 
-        {creatP && (
+        {handlePostPage && (
           <div
             onClick={() => {
-              setCreatP(false);
+              setHandlePostPage(false);
             }}
             className="fixed inset-0 z-[999999] flex justify-center items-center bg-opacity-90 bg-black"
           >
             <div onClick={(e) => e.stopPropagation()}>
-              <CreatePost className="w-full h-auto" />
+              <PostPage
+                setPostPage={handlePostPage}
+                className="w-full h-auto"
+              />
             </div>
           </div>
         )}
