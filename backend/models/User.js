@@ -18,8 +18,7 @@ const UserSchema = new mongoose.Schema({
   image: {
     type: String,
   },
-    profilePicture: { type: String, default: "path/to/default/profile/pic.jpg" } // Add the profile picture field
-
+    profilePicture: { type: String, default: "path/to/default/profile/pic.jpg" } 
 });
 UserSchema.plugin(AutoIncrement, { inc_field: 'UserId' }); 
 

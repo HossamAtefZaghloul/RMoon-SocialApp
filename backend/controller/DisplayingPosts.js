@@ -4,7 +4,6 @@ export const DisplayingPosts = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    
     const posts = await Post.find({ user: userId });
 
     // Check if posts exist for the user

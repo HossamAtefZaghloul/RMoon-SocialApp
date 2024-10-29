@@ -1,10 +1,12 @@
-import { useContext } from "react";
-import { Bell, LogOut } from "lucide-react";
+import { useContext, useState } from "react";
+import { Bell, LogOut, UserCheck, UserX } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import UserSearch from "../Search/Search.jsx";
-export default function CompactNavbar(x) {
+
+export default function CompactNavbar() {
   const navigate = useNavigate();
+  const [notifications, setNotifications] = useState(false);
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
   console.log(user.image);
@@ -30,14 +32,55 @@ export default function CompactNavbar(x) {
           </div>
 
           <div className="flex items-center gap-5 lg:ml-6">
-            <div className="">
+            <div className="flex flex-col items-center justify-center">
               <button
+                onClick={() => {
+                  setNotifications(!notifications);
+                }}
                 type="button"
-                className=" ml-3 flex-shrink-0 p-1 rounded-full hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-900"
+                className={`m-3 mt-4 flex-shrink-0 p-1 rounded-full border-xl border-red-900 border-2 hover:bg-red-900 focus:outline-none  ${
+                  notifications && "bg-red-900"
+                } focus:ring-[#101011] `}
               >
                 <span className="sr-only">View notifications</span>
                 <Bell className=" text-white h-6 w-6" />
               </button>
+              {notifications && (
+                <div className="absolute top-[57px] w-[250px] h-auto bg-[#18191A] bg-opacity-0 rounded-lg ">
+                  <div className="w-auto">
+                    <ul className="space-y-0">
+                      <li
+                        key={user._id}
+                        className="bg-[#18191A] shadow p-4 m-0 flex items-center justify-between space-x-4 z-50 rounded-lg border border-red-900"
+                      >
+                        <div className="flex items-center">
+                          <div className="relative">
+                            <img
+                              src={server + user.image}
+                              alt={user.username}
+                              className="w-[35px] h-[35px] rounded-full"
+                            />
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-sm font-medium text-red-700">
+                              {user.username}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              ahmed Online
+                            </p>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <UserCheck className=" text-red-700" />
+                            <UserX className=" text-red-700" />
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
             </div>
             <div
               className="flex
