@@ -5,7 +5,7 @@ import useFetch from "../customHooks/UseFetch.jsx";
 export default function UserSearch() {
   const [query, setQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const limit = 5; // Set limit to 5 for maximum search results
+  const limit = 5; //maximum search results
   const token = localStorage.getItem("token");
 
   const { data, isLoading, error } = useFetch(
@@ -14,7 +14,6 @@ export default function UserSearch() {
   );
 
   useEffect(() => {
-    console.log("Fetched data:", data); // Add this line for debugging
     if (data) {
       const result = data
         .filter(
@@ -22,7 +21,7 @@ export default function UserSearch() {
             user.username &&
             user.username.toLowerCase().includes(query.toLowerCase())
         )
-        .slice(0, limit); // Limit results to the first 5 matches
+        .slice(0, limit);
 
       setFilteredData(query ? result : []);
     }
