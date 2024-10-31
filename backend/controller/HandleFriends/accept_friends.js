@@ -3,14 +3,16 @@ import { Friends } from '../../models/Friends.js';
 
 export const accept_friends = async (req, res) => {
   try {
-    const { friend_req_id } = req.body; 
+    const { friendRequestID } = req.body; 
+    console.log('91329183128389')
+    console.log(friendRequestID)
 
-    if (!mongoose.Types.ObjectId.isValid(friend_req_id)) {
+    if (!mongoose.Types.ObjectId.isValid(friendRequestID)) {
       return res.status(400).json({ message: "Invalid Friend ID" });
     }
 
     const friend_accepted = await Friends.findByIdAndUpdate(
-      friend_req_id,
+      friendRequestID,
       { status: 'accepted' }, 
       { new: true }
     );
@@ -19,7 +21,7 @@ export const accept_friends = async (req, res) => {
       return res.status(404).json({ message: "Friend request not found" });
     }
 
-    res.status(200).json(friend_accepted);
+    res.status(200).json({ message: "Friend request not found", friend_accepted });
 
   } catch (error) {
     console.error("Error accepting friend request:", error);
