@@ -3,14 +3,15 @@ import { Friends } from '../../models/Friends.js';
 export const get_friend_req = async (req, res) => {
     const userId = req.user.userId;
     try {
+      // Only fetch requests where the user is the recipient and requester is different
       const friendsList = await Friends.find({
-        $or: [{ requester: userId }, { recipient: userId }],
+        recipient: userId,
+        requester: { $ne: userId },  // Excludes requests sent by the user
         status: 'pending',
       })
       .populate('requester', 'email username image')
       .populate('recipient', 'email username image');
-      // console.log('3242343232342');
-      // console.log(friendsList);
+
       res.status(200).json(friendsList);
     } catch (error) {
         console.error("Error fetching friends:", error);

@@ -18,6 +18,7 @@ import { get_user } from './controller/get_user.js';
 import { handle_friend_request } from './controller/HandleFriends/friendRequest.js';
 import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
+import { accept_friends } from './controller/HandleFriends/accept_friends.js';
 
 const app = express(); 
 dotenv.config(); 
@@ -89,7 +90,7 @@ app.get('/Profile/user', authenticateToken, get_user);
 app.get('/getfriends', authenticateToken, get_friend_req);
 app.delete('/Posts/:postID',deletePosts);
 app.post('/api/friendrequest', handle_friend_request);
-
+app.post('/api/accept_fiends', accept_friends)
 app.post("/profilepic", upload.single("image"), async (req, res) => {
   try {    
     const {userId } = req.body;

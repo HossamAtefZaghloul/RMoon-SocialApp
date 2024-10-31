@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, User, Loader, UserPlus, X, UserX, UserCheck } from "lucide-react";
+import { Search, User, Loader, UserPlus, X, UserCheck } from "lucide-react";
 import axios from "axios";
 import useFetch from "../customHooks/UseFetch.jsx";
 import jwt_decode from "jwt-decode";

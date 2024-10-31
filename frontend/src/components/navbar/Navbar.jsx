@@ -1,26 +1,15 @@
-import { useContext, useState,useEffect } from "react";
-import { Bell, LogOut, UserCheck, UserX } from "lucide-react";
+import { useContext} from "react";
+import {LogOut, } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import UserSearch from "../Search/Search.jsx";
-import useFetch from "../customHooks/UseFetch.jsx";
+import Notification from './Notification.jsx'
 
 export default function CompactNavbar() {
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState(false);
   const { user } = useContext(UserContext);
-  const [userB, setUserB] = useState('');
   const server = "http://localhost:5000/";
-  const token = localStorage.getItem("token");
-//GetUserFriends
-  const { data } = useFetch("http://localhost:5000/getfriends", token);
-  useEffect(() => {
-    if (data) {
-      setUserB(data);
-    }
-  }, [data]);
- console.log(userB);
- 
+
 
   return (
     <div className=" bg-[#18191A] sticky top-0 z-50 bg-cover bg-center shadow border-b border-gray-700  sm:w-full sm:h-full   ">
@@ -44,57 +33,7 @@ export default function CompactNavbar() {
           </div>
 
           <div className="flex items-center gap-5 lg:ml-6">
-            <div className="flex flex-col items-center justify-center">
-              <button
-                onClick={() => {
-                  setNotifications(!notifications);
-                }}
-                type="button"
-                className={`m-3 flex-shrink-0 p-1 rounded-full  border-red-900 border-2 hover:bg-red-900 focus:outline-none  ${
-                  notifications && "bg-red-900"
-                } focus:ring-[#101011] `}
-              >
-                <span className="sr-only">View notifications</span>
-                <Bell className=" text-white h-6 w-6" />
-              </button>
-              {notifications && (
-                <div className="absolute top-[57px] w-[250px] h-auto bg-[#18191A] bg-opacity-0 rounded-lg ">
-                  <div className="w-auto">
-                    <ul className="space-y-0">
-                    {userB.map((user, index) => (
-                      <li
-                        key={index}
-                        className="bg-[#18191A] shadow p-4 m-0 flex items-center justify-between space-x-4 z-50 rounded-lg border border-red-900"
-                      >
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <img
-                              src={server + user.requester.image}
-                              alt={'img'}
-                              className="w-[33x] h-[33px] rounded-full"
-                            />
-                          </div>
-                          <div className="ml-3">
-                            <p className="text-sm font-medium text-red-700">
-                              {user.requester.username}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {user.requester.email}
-                            </p>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <UserCheck className=" text-red-700" />
-                            <UserX className=" text-red-700" />
-                          </div>
-                        </div>
-                      </li> ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-            </div>
+          <Notification/>
             <div
               className="flex
             items-center gap-2 justify-center"
