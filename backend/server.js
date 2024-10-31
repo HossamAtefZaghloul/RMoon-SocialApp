@@ -94,7 +94,7 @@ app.post("/profilepic", upload.single("image"), async (req, res) => {
   try {    
     const {userId } = req.body;
     console.log(userId)
-    // console.log("ghff")
+    // console.log("3ewdwdcdscdscs")
     const image = req.file.path.substring(req.file.path.indexOf("public\\"));
 
     const updatedUser = await User.findByIdAndUpdate(

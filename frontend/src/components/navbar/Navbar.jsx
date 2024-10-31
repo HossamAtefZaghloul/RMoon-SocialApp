@@ -12,17 +12,16 @@ export default function CompactNavbar() {
   const [userB, setUserB] = useState('');
   const server = "http://localhost:5000/";
   const token = localStorage.getItem("token");
-
-
+//GetUserFriends
   const { data } = useFetch("http://localhost:5000/getfriends", token);
-
   useEffect(() => {
     if (data) {
       setUserB(data);
-      // This will log the fetched data right after it is received
     }
-  }, [data]); // Add data as a dependency
-  console.log(userB);
+  }, [data]);
+ console.log(userB);
+ 
+
   return (
     <div className=" bg-[#18191A] sticky top-0 z-50 bg-cover bg-center shadow border-b border-gray-700  sm:w-full sm:h-full   ">
       <div className="   mx-auto px-2 sm:px-4 lg:px-8">
@@ -51,7 +50,7 @@ export default function CompactNavbar() {
                   setNotifications(!notifications);
                 }}
                 type="button"
-                className={`m-3 mt-4 flex-shrink-0 p-1 rounded-full border-xl border-red-900 border-2 hover:bg-red-900 focus:outline-none  ${
+                className={`m-3 flex-shrink-0 p-1 rounded-full  border-red-900 border-2 hover:bg-red-900 focus:outline-none  ${
                   notifications && "bg-red-900"
                 } focus:ring-[#101011] `}
               >
@@ -62,24 +61,25 @@ export default function CompactNavbar() {
                 <div className="absolute top-[57px] w-[250px] h-auto bg-[#18191A] bg-opacity-0 rounded-lg ">
                   <div className="w-auto">
                     <ul className="space-y-0">
+                    {userB.map((user, index) => (
                       <li
-                        key={user._id}
+                        key={index}
                         className="bg-[#18191A] shadow p-4 m-0 flex items-center justify-between space-x-4 z-50 rounded-lg border border-red-900"
                       >
                         <div className="flex items-center">
                           <div className="relative">
                             <img
-                              src={server + user.image}
-                              alt={user.username}
-                              className="w-[35px] h-[35px] rounded-full"
+                              src={server + user.requester.image}
+                              alt={'img'}
+                              className="w-[33x] h-[33px] rounded-full"
                             />
                           </div>
                           <div className="ml-3">
                             <p className="text-sm font-medium text-red-700">
-                              {user.username}
+                              {user.requester.username}
                             </p>
                             <p className="text-xs text-gray-500">
-                              ahmed Online
+                              {user.requester.email}
                             </p>
                           </div>
                         </div>
@@ -89,7 +89,7 @@ export default function CompactNavbar() {
                             <UserX className=" text-red-700" />
                           </div>
                         </div>
-                      </li>
+                      </li> ))}
                     </ul>
                   </div>
                 </div>
@@ -99,20 +99,22 @@ export default function CompactNavbar() {
               className="flex
             items-center gap-2 justify-center"
             >
-              <Link to="/profilepage">
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src={server + user.image}
-                  alt="profilePicture"
-                />
-              </Link>
+              <div className="flex items-center justify-center w-[44px] h-[44px]  overflow-hidden">
+                <Link to="/profilepage">
+                  <img
+                    className="w-full h-full object-cover border-2 rounded-full border-red-700"
+                    src={server + user.image}
+                    alt="profilePicture"
+                  />
+                </Link></div>
               <span className="text-white">{user.username}</span>
             </div>
             <div className=" text-white flex gap-2  ml-12 items-center">
               <button
                 className="flex gap-1 text-white hover:text-red-600   "
                 onClick={() => {
-                  localStorage.clear();
+                  // localStorage.clear();
+                  localStorage.removeItem("token");
                   navigate("/login");
                 }}
               >

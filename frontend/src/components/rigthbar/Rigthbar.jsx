@@ -18,7 +18,7 @@ export default function Rightbar() {
   }, [data]);
 
   // Mock online status if not provided by the API
-  const onlineUsers = new Set(["admin"]); // Example usernames that are online
+  const onlineUsers = new Set(["admin"]); 
   const filteredFriends = allUsers.filter(
     (friend) =>
       friend.username.toLowerCase().includes(query.toLowerCase()) &&

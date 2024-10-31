@@ -1,17 +1,10 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import useFetch from "../customHooks/UseFetch.jsx";
-import {
-  MessageCircle,
-  UserPlus,
-  Settings,
-  Camera,
-  ImageUp,
-} from "lucide-react";
+import { MessageCircle, UserPlus, Settings, Camera } from "lucide-react";
 import axios from "axios";
 import Posts from "../Posts/Posts.jsx";
 import jwt_decode from "jwt-decode";
-
 
 export default function Profile() {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -24,61 +17,59 @@ export default function Profile() {
   const tokenData = jwt_decode(token);
   const userId = tokenData.userId;
 
-  const { data } = useFetch("http://localhost:5000/Profile/user", token);
+  const { data } = useFetch(`${server}Profile/user`, token);
 
   useEffect(() => {
-    if (data) {
-      setProfilePic(data);
-    }
+    if (data) setProfilePic(data);
   }, [data]);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = useCallback((e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
-  };
+    setFile(selectedFile);
+  }, []);
 
-  const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append("image", file);
-    formData.append("userId", userId);
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/profilepic",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+  useEffect(() => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("userId", userId);
+
+      const uploadProfilePic = async () => {
+        try {
+      const res = await axios.post(`${server}profilepic`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          } 
+        );
+          if (res){
+            window.location.reload()
+          }
+        } catch (error) {
+          console.error("Error uploading profile picture:", error);
         }
-      );
+      };
 
-      if (response.data) {
-        console.log("123123123414");
-      }
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
+      uploadProfilePic();
     }
+  }, [file, server, userId]);
+
+  const toggleFollow = () => {
+    setIsFollowing((prev) => !prev);
+    setFollowerCount((count) => (isFollowing ? count - 1 : count + 1));
   };
-  console.log(profilePic);
 
   return (
     <div className="container mx-auto p-4 max-w-3xl bg-[#18191A]">
       <div className="bg-[#18191A] rounded-lg shadow-md overflow-hidden mb-6 w-full h-full">
         <div className="h-48 bg-[#242526] relative">
-         {profilePic && <img
-            src={server + profilePic.profilePicture}
-            alt="Profile Background"
-            className="w-full h-full object-cover"
-          />}
-          <button
-            onClick={handleSubmit}
-            className="absolute bottom-2 right-12 bg-[#18191A] p-2 rounded-full shadow-md"
-          >
-            <ImageUp className="w-5 h-5 text-red-800" />
-          </button>
-
+          {profilePic && (
+            <img
+              src={`${server}${profilePic.profilePicture}`}
+              alt="Profile Background"
+              className="w-full h-full object-cover"
+            />
+          )}
           <div className="absolute bottom-2 right-2 bg-[#18191A] p-2 rounded-full shadow-md">
             <Camera className="w-5 h-5 text-red-800" />
             <input
@@ -92,8 +83,8 @@ export default function Profile() {
           <div className="flex flex-col sm:flex-row items-center sm:items-end -mt-20 sm:-mt-16 mb-4 sm:mb-0">
             <div className="w-32 h-32 rounded-full border-[4px] border-red-900 overflow-hidden bg-gray-200 z-10">
               <img
-                src={server + user.image}
-                alt="Profile"
+                src={`${server}${user.image}`}
+                alt="User Profile Picture"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -119,16 +110,9 @@ export default function Profile() {
             </div>
             <div className="flex space-x-2">
               <button
-                onClick={() => {
-                  setIsFollowing(!isFollowing);
-                  setFollowerCount(
-                    isFollowing ? followerCount - 1 : followerCount + 1
-                  );
-                }}
+                onClick={toggleFollow}
                 className={`px-4 py-2 rounded-md ${
-                  isFollowing
-                    ? "bg-red-900 text-white"
-                    : "bg-red-800 text-white"
+                  isFollowing ? "bg-red-900 text-white" : "bg-red-800 text-white"
                 }`}
               >
                 {isFollowing ? "Unfollow" : "Follow"}
@@ -145,9 +129,9 @@ export default function Profile() {
               </button>
             </div>
           </div>
-          <p className=" flex items-center mt-4 text-white">
+          <p className="flex items-center mt-4 text-white">
             Red pow
-            <img className=" w-6 h-5" src="../../.././public/23.png" alt="" />
+            <img className="w-6 h-5" src="../../../public/23.png" alt="Icon" />
           </p>
         </div>
         <div>
