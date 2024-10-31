@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState,useEffect } from "react";
 import { Bell, LogOut, UserCheck, UserX } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
@@ -9,13 +9,20 @@ export default function CompactNavbar() {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState(false);
   const { user } = useContext(UserContext);
+  const [userB, setUserB] = useState('');
   const server = "http://localhost:5000/";
-  console.log(user.image);
+  const token = localStorage.getItem("token");
 
-  // const { data, isLoading, error } = useFetch(
-  //   "http://localhost:5000/api/users",
-  //   header
-  // );
+
+  const { data } = useFetch("http://localhost:5000/getfriends", token);
+
+  useEffect(() => {
+    if (data) {
+      setUserB(data);
+      // This will log the fetched data right after it is received
+    }
+  }, [data]); // Add data as a dependency
+  console.log(userB);
   return (
     <div className=" bg-[#18191A] sticky top-0 z-50 bg-cover bg-center shadow border-b border-gray-700  sm:w-full sm:h-full   ">
       <div className="   mx-auto px-2 sm:px-4 lg:px-8">

@@ -13,6 +13,7 @@ import { deletePosts }from './controller/deletePosts.js';
 import { DisplayingPosts } from './controller/DisplayingPosts.js';
 import { fetchUsers } from './controller/fetchUsers.js';
 import { GetUsers } from './controller/GetUsers.js';
+import { get_friend_req } from './controller/HandleFriends/get_friend_req.js';
 import { get_user } from './controller/get_user.js';
 import { handle_friend_request } from './controller/HandleFriends/friendRequest.js';
 import {User} from "./models/User.js"
@@ -85,6 +86,7 @@ app.get('/api/users', authenticateToken, fetchUsers);
 app.get('/search/users', authenticateToken, GetUsers);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
 app.get('/Profile/user', authenticateToken, get_user);
+app.get('/getfriends', authenticateToken, get_friend_req);
 app.delete('/Posts/:postID',deletePosts);
 app.post('/api/friendrequest', handle_friend_request);
 
