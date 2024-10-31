@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
+import useFetch from "../customHooks/UseFetch.jsx";
 import {
   MessageCircle,
   UserPlus,
@@ -9,6 +10,8 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import Posts from "../Posts/Posts.jsx";
+import jwt_decode from "jwt-decode";
+
 
 export default function Profile() {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -17,14 +20,17 @@ export default function Profile() {
   const { user } = useContext(UserContext);
   const [file, setFile] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
+  const token = localStorage.getItem("token");
+  const tokenData = jwt_decode(token);
+  const userId = tokenData.userId;
 
-  // Load profile picture from localStorage on component mount
+  const { data } = useFetch("http://localhost:5000/Profile/user", token);
+
   useEffect(() => {
-    const savedProfilePic = localStorage.getItem("profilePic");
-    if (savedProfilePic) {
-      setProfilePic(savedProfilePic);
+    if (data) {
+      setProfilePic(data);
     }
-  }, []);
+  }, [data]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -34,11 +40,9 @@ export default function Profile() {
   };
 
   const handleSubmit = async () => {
-    const userId = user.id;
     const formData = new FormData();
     formData.append("image", file);
     formData.append("userId", userId);
-
     try {
       const response = await axios.post(
         "http://localhost:5000/profilepic",
@@ -51,23 +55,23 @@ export default function Profile() {
       );
 
       if (response.data) {
-        setProfilePic(response.data);
-        localStorage.setItem("profilePic", response.data); // Save the URL in localStorage
+        console.log("123123123414");
       }
     } catch (error) {
       console.error("Error uploading profile picture:", error);
     }
   };
+  console.log(profilePic);
 
   return (
     <div className="container mx-auto p-4 max-w-3xl bg-[#18191A]">
       <div className="bg-[#18191A] rounded-lg shadow-md overflow-hidden mb-6 w-full h-full">
         <div className="h-48 bg-[#242526] relative">
-          <img
-            src={server + profilePic}
+         {profilePic && <img
+            src={server + profilePic.profilePicture}
             alt="Profile Background"
             className="w-full h-full object-cover"
-          />
+          />}
           <button
             onClick={handleSubmit}
             className="absolute bottom-2 right-12 bg-[#18191A] p-2 rounded-full shadow-md"

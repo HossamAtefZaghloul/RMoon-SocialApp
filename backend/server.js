@@ -13,6 +13,7 @@ import { deletePosts }from './controller/deletePosts.js';
 import { DisplayingPosts } from './controller/DisplayingPosts.js';
 import { fetchUsers } from './controller/fetchUsers.js';
 import { GetUsers } from './controller/GetUsers.js';
+import { get_user } from './controller/get_user.js';
 import { handle_friend_request } from './controller/HandleFriends/friendRequest.js';
 import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
@@ -60,7 +61,7 @@ const upload = multer({ storage });
 ///
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-``
+
   if (!authHeader) {
     return res.status(401).json({ message: 'Token not provided' });
   }
@@ -83,6 +84,7 @@ app.post('/createpost',upload.single('image'), createPost);
 app.get('/api/users', authenticateToken, fetchUsers);
 app.get('/search/users', authenticateToken, GetUsers);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
+app.get('/Profile/user', authenticateToken, get_user);
 app.delete('/Posts/:postID',deletePosts);
 app.post('/api/friendrequest', handle_friend_request);
 
@@ -90,7 +92,7 @@ app.post("/profilepic", upload.single("image"), async (req, res) => {
   try {    
     const {userId } = req.body;
     console.log(userId)
-    console.log("ghff")
+    // console.log("ghff")
     const image = req.file.path.substring(req.file.path.indexOf("public\\"));
 
     const updatedUser = await User.findByIdAndUpdate(

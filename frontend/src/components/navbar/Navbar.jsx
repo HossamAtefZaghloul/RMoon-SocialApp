@@ -105,7 +105,7 @@ export default function CompactNavbar() {
               <button
                 className="flex gap-1 text-white hover:text-red-600   "
                 onClick={() => {
-                  localStorage.removeItem("token");
+                  localStorage.clear();
                   navigate("/login");
                 }}
               >

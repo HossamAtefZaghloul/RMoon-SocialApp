@@ -1,29 +1,21 @@
 import { useState, useEffect } from "react";
-import {
-  Search,
-  User,
-  Loader,
-  UserPlus,
-  X,
-  UserX,
-  UserCheck,
-} from "lucide-react";
+import { Search, User, Loader, UserPlus, X, UserX, UserCheck } from "lucide-react";
 import axios from "axios";
 import useFetch from "../customHooks/UseFetch.jsx";
 import jwt_decode from "jwt-decode";
 
 export default function UserSearch() {
   const [query, setQuery] = useState("");
-  const [addUser, setAddUser] = useState(false);
+  const [addUserStates, setAddUserStates] = useState({});
   const [filteredData, setFilteredData] = useState([]);
   const [userB, setUserB] = useState("");
-  const limit = 4; //maximum search results :3><
+  const limit = 4; // Maximum search results
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
   const userA = tokenData.userId;
-
-  const handleAdd = (b_id) => {
-    setUserB(b_id);
+  
+  const handleAdd = (UserB_id) => {
+    setUserB(UserB_id);
   };
 
   useEffect(() => {
@@ -31,13 +23,10 @@ export default function UserSearch() {
 
     const sendFriendRequest = async () => {
       try {
-        const res = await axios.post(
-          "http://localhost:5000/api/friendrequest",
-          {
-            userA,
-            userB,
-          }
-        );
+        const res = await axios.post("http://localhost:5000/api/friendrequest", {
+          userA,
+          userB,
+        });
         console.log("Friend request sent:", res);
       } catch (e) {
         console.log("Error sending friend request:", e);
@@ -55,16 +44,20 @@ export default function UserSearch() {
   useEffect(() => {
     if (data) {
       const result = data
-        .filter(
-          (user) =>
-            user.username &&
-            user.username.toLowerCase().includes(query.toLowerCase())
+        .filter((user) =>
+          user.username.toLowerCase().includes(query.toLowerCase())
         )
         .slice(0, limit);
-
       setFilteredData(query ? result : []);
     }
   }, [data, query]);
+
+  const toggleAddUserState = (userId) => {
+    setAddUserStates((prevStates) => ({
+      ...prevStates,
+      [userId]: !prevStates[userId],
+    }));
+  };
 
   return (
     <div className="z-[9999999]">
@@ -90,58 +83,42 @@ export default function UserSearch() {
           <Search className="cursor-pointer text-red-700 h-4 w-4 absolute right-2 top-2" />
         )}
       </div>
-      {isLoading && (
+      {isLoading && query && (
         <div className="flex items-center justify-center text-red-500">
           <Loader className="animate-spin h-5 w-5" />
           <span>Loading...</span>
         </div>
       )}
-      {error && (
-        <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
+      {error && query && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
           <span className="block sm:inline">{error}</span>
         </div>
       )}
       {!isLoading && !error && filteredData.length > 0 && (
         <ul className="space-y-2">
           {filteredData.map((user) => (
-            <li
-              key={user._id}
-              className="bg-[#18191A] shadow rounded-lg p-4 flex items-center space-x-4 z-50 border border-gray-700"
-            >
+            <li key={user._id} className="bg-[#18191A] shadow rounded-lg p-4 flex items-center space-x-4 z-50 border border-gray-700">
               <User className="h-6 w-6 text-red-800" />
               <div>
                 <p className="font-medium text-white">{user.username}</p>
                 <p className="text-sm text-gray-500">{user.email}</p>
               </div>
-              {addUser ? (
+              {addUserStates[user._id] ? (
                 <div className="flex justify-end w-full text-red-700">
-                  <button
-                    onClick={() => {
-                      setAddUser(!addUser);
-                    }}
-                  >
-                    <UserPlus />
+                  <button onClick={() => toggleAddUserState(user._id)}>
+                    <UserCheck />
                   </button>
                 </div>
               ) : (
-                <div className="flex justify-end w-full gap-2">
+                <div className="flex justify-end w-full text-red-700">
                   <button
                     onClick={() => {
                       handleAdd(user._id);
-                      setAddUser(true);
+                      toggleAddUserState(user._id);
                     }}
                   >
-                    <UserCheck className=" text-red-700" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      setAddUser(true);
-                    }}
-                  >
-                    <UserX className=" text-red-700" />
+                    <UserPlus />
+                    
                   </button>
                 </div>
               )}
@@ -149,11 +126,7 @@ export default function UserSearch() {
           ))}
         </ul>
       )}
-      {!isLoading && !error && query && filteredData.length === 0 && (
-        <div className="text-center text-red-800 bg-[#242526] rounded-lg p-5 border border-gray-700">
-          No users found
-        </div>
-      )}
+   
     </div>
   );
 }
