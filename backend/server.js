@@ -16,6 +16,7 @@ import { GetUsers } from './controller/GetUsers.js';
 import { get_friend_req } from './controller/HandleFriends/get_friend_req.js';
 import { get_user } from './controller/get_user.js';
 import { handle_friend_request } from './controller/HandleFriends/friendRequest.js';
+import { get_acceptes_friend_req } from './controller/HandleFriends/get_acceptes_friend_req.js';
 import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
 import { accept_friends } from './controller/HandleFriends/accept_friends.js';
@@ -88,6 +89,7 @@ app.get('/search/users', authenticateToken, GetUsers);
 app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
 app.get('/Profile/user', authenticateToken, get_user);
 app.get('/getfriends', authenticateToken, get_friend_req);
+app.get('/api/acceptedfriends', authenticateToken, get_acceptes_friend_req);
 app.delete('/Posts/:postID',deletePosts);
 app.post('/api/friendrequest', handle_friend_request);
 app.post('/api/accept_fiends', accept_friends)

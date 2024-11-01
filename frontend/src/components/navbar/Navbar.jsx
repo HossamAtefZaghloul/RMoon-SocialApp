@@ -2,7 +2,7 @@ import { useContext} from "react";
 import {LogOut, } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
-import UserSearch from "../Search/Search.jsx";
+import UserSearch from "./Search.jsx";
 import Notification from './Notification.jsx'
 
 export default function CompactNavbar() {

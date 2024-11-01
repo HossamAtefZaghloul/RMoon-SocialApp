@@ -6,10 +6,14 @@ import "./app.css";
 import ProtectedRoute from "./components/ProtectedRoute.js";
 import { UserProvider } from "./components/useContexts/UserProvider.jsx";
 import { PostsProvider } from "./components/useContexts/PostProvider.jsx";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProfilePage from "./Pages/profilePage/ProfilePage.jsx";
+
 function App() {
+  const queryClient = new QueryClient();
   return (
+    <QueryClientProvider client={queryClient}>
+
     <PostsProvider>
       <UserProvider>
         <BrowserRouter>
@@ -37,6 +41,7 @@ function App() {
         </BrowserRouter>
       </UserProvider>
     </PostsProvider>
+    </QueryClientProvider>
   );
 }
 

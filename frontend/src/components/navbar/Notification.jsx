@@ -9,7 +9,7 @@ const Notification = () => {
   const server = "http://localhost:5000/";
   const token = localStorage.getItem("token");
   const [res, setRes] = useState('');
-
+  
   // GetUserFriends
   const { data } = useFetch("http://localhost:5000/getfriends", token);
 
