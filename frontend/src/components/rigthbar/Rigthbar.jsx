@@ -19,11 +19,11 @@ export default function Rightbar() {
   const userId = tokenData.userId;
   
   const { data: allFriends, isLoading, isError, refetch } = useQuery({
-    queryKey: ["acceptedFriends", token],
-    queryFn: () => fetchFriends(token),
+    queryKey: ["acceptedFriends", token],//Any change in token will trigger a fresh fetch.
+    queryFn: () => fetchFriends(token),// Call this func every time  fresh fetch needded
     enabled: !!token, // Only fetch if token exists
     refetchOnWindowFocus: true, // Refetches data when window regains focus
-    refetchInterval: 30000, // Optional: Automatically refetch every 60 seconds
+    refetchInterval: 30000, // Optional: Automatically refetch every {sec} seconds
     staleTime: 30000, // Optional: Cache data for 30 seconds before refetching
   });
 
@@ -31,15 +31,11 @@ export default function Rightbar() {
   if (isError) return <p>Error loading friends list.</p>;
 
   const filteredFriends = allFriends?.filter((friend) => {
-    const friendUsername =
-      friend.requester._id === userId
-        ? friend.recipient.username
-        : friend.requester.username;
-  
+    const friendUsername = friend.requester.username; 
     return friendUsername.toLowerCase().includes(query.toLowerCase());
   });
   console.log(filteredFriends)
-
+  console.log(filteredFriends)
   return (
     <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px]">
       <div className="p-4">
