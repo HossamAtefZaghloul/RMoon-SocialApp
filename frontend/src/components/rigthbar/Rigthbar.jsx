@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Search, Users } from "lucide-react";
+import jwt_decode from "jwt-decode";
 import "./rightbar.css";
 
 const fetchFriends = async (token) => {
@@ -14,7 +15,9 @@ const fetchFriends = async (token) => {
 export default function Rightbar() {
   const [query, setQuery] = useState("");
   const token = localStorage.getItem("token");
-
+  const tokenData = jwt_decode(token);
+  const userId = tokenData.userId;
+  
   const { data: allFriends, isLoading, isError, refetch } = useQuery({
     queryKey: ["acceptedFriends", token],
     queryFn: () => fetchFriends(token),
@@ -27,9 +30,15 @@ export default function Rightbar() {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading friends list.</p>;
 
-  const filteredFriends = allFriends?.filter((friend) =>
-    friend.requester?.username?.toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredFriends = allFriends?.filter((friend) => {
+    const friendUsername =
+      friend.requester._id === userId
+        ? friend.recipient.username
+        : friend.requester.username;
+  
+    return friendUsername.toLowerCase().includes(query.toLowerCase());
+  });
+  console.log(filteredFriends)
 
   return (
     <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px]">
@@ -52,12 +61,18 @@ export default function Rightbar() {
             <li key={friend._id} className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg">
               <div className="flex items-center">
                 <img
-                  src={`http://localhost:5000/${friend.requester.image}`}
+                  src={`http://localhost:5000/${friend.requester._id === userId
+                    ? friend.recipient.image
+                    : friend.requester.image}`}
                   alt={friend.requester.username}
                   className="w-[35px] h-[35px] rounded-full"
                 />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-red-700">{friend.requester.username}</p>
+                  <p className="text-sm font-medium text-red-700">{
+                  friend.requester._id === userId
+                  ? friend.recipient.username
+                  : friend.requester.username
+                  }</p>
                   <p className="text-xs text-gray-500">Offline</p>
                 </div>
               </div>

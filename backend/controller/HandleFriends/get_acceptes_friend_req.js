@@ -4,9 +4,10 @@ export const get_acceptes_friend_req = async (req, res) => {
     const userId = req.user.userId;
     try {
       const friendsList = await Friends.find({
-        recipient: userId,
-        requester: { $ne: userId },  
-        status: 'accepted',
+        $or: [
+          { requester: userId },  // Friend requests sent by the user and accepted
+          { recipient: userId }    // Friend requests received by the user and accepted
+        ]
       })
       .populate('requester', 'email username image')
       .populate('recipient', 'email username image');

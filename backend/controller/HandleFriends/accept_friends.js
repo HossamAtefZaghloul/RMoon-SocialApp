@@ -4,7 +4,7 @@ import { Friends } from '../../models/Friends.js';
 export const accept_friends = async (req, res) => {
   try {
     const { friendRequestID } = req.body; 
-    console.log('91329183128389')
+    // console.log('91329183128389')
     console.log(friendRequestID)
 
     if (!mongoose.Types.ObjectId.isValid(friendRequestID)) {

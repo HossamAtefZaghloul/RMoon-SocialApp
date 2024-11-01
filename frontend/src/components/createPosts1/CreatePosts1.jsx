@@ -18,7 +18,7 @@ export default function CreatePosts() {
         <div className="bg-[#242526] flex flex-col rounded-lg shadow p-2 mb-6 justify-center">
           <div className="flex gap-1 p-2 m-2">
             <img
-              className="rounded-full w-[55px] h-[55px]"
+              className="rounded-full w-[55px] h-[55px] border-2"
               src={server + user.image}
               alt="User"
             />

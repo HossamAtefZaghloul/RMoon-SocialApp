@@ -57,7 +57,7 @@ export default function Posts() {
               <img
                 src={server + (user?.image || "default-avatar.png")}
                 alt="User Avatar"
-                className="w-[50px] h-[50px] rounded-full mr-3 border border-green-500"
+                className="w-[50px] h-[50px] rounded-full mr-3 border-2 border-red-700"
               />
               <div className="flex flex-col w-full">
                 <p className="font-semibold text-white">{user?.username}</p>
