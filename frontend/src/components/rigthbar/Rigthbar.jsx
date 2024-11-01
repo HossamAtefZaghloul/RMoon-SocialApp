@@ -54,6 +54,7 @@ export default function Rightbar() {
       <div className="flex-1 overflow-y-auto sidebar ">
         <ul className="space-y-2">
           {filteredFriends.map((friend) => (
+            friend.status === "accepted" &&
             <li key={friend._id} className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg">
               <div className="flex items-center">
                 <img
