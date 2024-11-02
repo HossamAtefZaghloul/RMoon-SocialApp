@@ -1,30 +1,31 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import axios from "axios";
 import { Search, Users } from "lucide-react";
 import jwt_decode from "jwt-decode";
 import "./rightbar.css";
+import Messenger from "./Messenger" 
 
 const fetchFriends = async (token) => {
-  const response = await fetch("http://localhost:5000/api/acceptedfriends", {
+  const response = await axios.get("http://localhost:5000/api/acceptedfriends", {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!response.ok) throw new Error("Network response was not ok");
-  return response.json();
+  return response.data; 
 };
-
+//
 export default function Rightbar() {
   const [query, setQuery] = useState("");
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
   const userId = tokenData.userId;
-  
+
   const { data: allFriends, isLoading, isError, refetch } = useQuery({
-    queryKey: ["acceptedFriends", token],//Any change in token will trigger a fresh fetch.
-    queryFn: () => fetchFriends(token),// Call this func every time  fresh fetch needded
-    enabled: !!token, // Only fetch if token exists
-    refetchOnWindowFocus: true, // Refetches data when window regains focus
-    refetchInterval: 30000, // Optional: Automatically refetch every {sec} seconds
-    staleTime: 30000, // Optional: Cache data for 30 seconds before refetching
+    queryKey: ["acceptedFriends", token],
+    queryFn: () => fetchFriends(token),
+    enabled: !!token,
+    refetchOnWindowFocus: true,
+    refetchInterval: 30000,
+    staleTime: 30000,
   });
 
   if (isLoading) return <p>Loading...</p>;
@@ -34,8 +35,7 @@ export default function Rightbar() {
     const friendUsername = friend.requester.username; 
     return friendUsername.toLowerCase().includes(query.toLowerCase());
   });
-  console.log(filteredFriends)
-  console.log(filteredFriends)
+
   return (
     <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px]">
       <div className="p-4">
@@ -51,41 +51,45 @@ export default function Rightbar() {
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto sidebar ">
+      <div className="flex-1 overflow-y-auto sidebar">
         <ul className="space-y-2">
-          {filteredFriends.map((friend) => (
-            friend.status === "accepted" &&
-            <li key={friend._id} className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg">
-              <div className="flex items-center">
-                <img
-                  src={`http://localhost:5000/${friend.requester._id === userId
-                    ? friend.recipient.image
-                    : friend.requester.image}`}
-                  alt={friend.requester.username}
-                  className="w-[35px] h-[35px] rounded-full"
-                />
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-red-700">{
-                  friend.requester._id === userId
-                  ? friend.recipient.username
-                  : friend.requester.username
-                  }</p>
-                  <p className="text-xs text-gray-500">Offline</p>
-                </div>
-              </div>
-            </li>
-          ))}
+          {filteredFriends && filteredFriends.length > 0 ? (
+            filteredFriends.map((friend) => (
+              friend.status === "accepted" && (
+                <li key={friend._id} className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg">
+                  <div onClick={() => { console.log(friend.requester.username); }} className="flex items-center cursor-pointer">
+                    <img
+                      src={`http://localhost:5000/${friend.requester._id === userId ? friend.recipient.image : friend.requester.image}`}
+                      alt={friend.requester.username}
+                      className="w-[35px] h-[35px] rounded-full"
+                    />
+                    <div className="ml-3">
+                      <p className="text-sm font-medium text-red-700">
+                        {friend.requester._id === userId ? friend.recipient.username : friend.requester.username}
+                      </p>
+                      <p className="text-xs text-gray-500">Offline</p>
+                    </div>
+                  </div>
+                </li>
+              )
+            ))
+          ) : (
+            <li className="px-4 py-2 text-gray-400">No friends found.</li>
+          )}
         </ul>
       </div>
       <div className="p-4 border-t border-gray-700">
         <button
           className="flex items-center justify-center w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
-          onClick={refetch} // Manual refresh option
+          onClick={refetch} 
         >
           <Users className="h-5 w-5 mr-2" />
           Find New Friends
         </button>
       </div>
+      <div className="fixed inset-0 z-[99999999] flex justify-end items-end">
+        <Messenger/>
+        </div>
     </div>
   );
 }
