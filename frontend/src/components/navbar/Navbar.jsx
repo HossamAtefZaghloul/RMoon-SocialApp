@@ -12,32 +12,24 @@ export default function CompactNavbar() {
 
 
   return (
-    <div className=" bg-[#18191A] sticky top-0 z-50 bg-cover bg-center shadow border-b border-gray-700  sm:w-full sm:h-full   ">
-      <div className="   mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="flex justify-between h-14">
-          <div className="flex px-2 lg:px-0 items-center gap-3">
-            <div className="flex-shrink-0 flex items-center ">
+    <div className=" bg-[#18191A] border-b border-gray-700 sm:w-full sm:h-full   ">
+        <div className="flex justify-between h-14 px-8">
+            <div className="flex items-center  gap-3">
               <img
                 className="rounded-full w-[35px] opacity-[0.9] h-[35px]"
                 src="../../.././public/Icon.jpg"
                 alt=""
               />
-              <span className="text-4xl text-red-800 font-extrabold font-serif sm:text-3xl">
+              <span className=" text-red-800 font-extrabold font-serif sm:text-3xl">
                 RMoon
               </span>
             </div>
-          </div>
-
-          <div className="w-[600px] ml-12">
+          <div className="ml-12 flex sm:w-[600px] min-w-[160px] ">
             <UserSearch />
           </div>
-
-          <div className="flex items-center gap-5 lg:ml-6">
-          <Notification/>
-            <div
-              className="flex
-            items-center gap-2 justify-center"
-            >
+          <div className="flex gap-5">
+              <Notification/>
+            <div className="flex items-center gap-2 justify-center">
               <div className="flex items-center justify-center w-[44px] h-[44px]  overflow-hidden">
                 <Link to="/profilepage">
                   <img
@@ -48,7 +40,7 @@ export default function CompactNavbar() {
                 </Link></div>
               <span className="text-white">{user.username}</span>
             </div>
-            <div className=" text-white flex gap-2  ml-12 items-center">
+            <div className="flex text-white gap-2 px-8 items-center">
               <button
                 className="flex gap-1 text-white hover:text-red-600   "
                 onClick={() => {
@@ -63,7 +55,6 @@ export default function CompactNavbar() {
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }

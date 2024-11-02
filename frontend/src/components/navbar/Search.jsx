@@ -60,7 +60,7 @@ export default function UserSearch() {
   };
 
   return (
-    <div className="z-[9999999]">
+    <div className="z-[9999999] w-full">
       <div className="relative m-3 rounded-full text-gray-400 hover:text-gray-500">
         <label className="sr-only" htmlFor="user-search">
           Search users
@@ -77,7 +77,7 @@ export default function UserSearch() {
         {query ? (
           <X
             onClick={() => setQuery("")}
-            className="cursor-pointer text-red-700 h-4 w-4 absolute right-2 top-2"
+            className="cursor-pointer text-red-700 h-4 w-4 absolute right-3 top-2"
           />
         ) : (
           <Search className="cursor-pointer text-red-700 h-4 w-4 absolute right-2 top-2" />
@@ -97,14 +97,16 @@ export default function UserSearch() {
       {!isLoading && !error && filteredData.length > 0 && (
         <ul className="space-y-2">
           {filteredData.map((user) => (
-            <li key={user._id} className="bg-[#18191A] shadow rounded-lg p-4 flex items-center space-x-4 z-50 border border-gray-700">
-              <User className="h-6 w-6 text-red-800" />
-              <div>
-                <p className="font-medium text-white">{user.username}</p>
-                <p className="text-sm text-gray-500">{user.email}</p>
-              </div>
+            <li key={user._id} className="bg-[#18191A] shadow rounded-lg p-4 flex items-center z-50 border border-gray-700">
+            <div className="flex gap-2 items-center">
+              <img className="w-9 h-9 sm:w-[50px] rounded-full p-1 text-red-800 " src={`http://localhost:5000/${user.image}`} alt="" />  
+                <div>
+                  <p className="font-medium text-white">{user.username}</p>
+                  <p className="text-sm font-medium text-gray-500">{user.email.length > 9 ? user.email.slice(0, 9) + "..." : user.email}</p>
+                </div>
+            </div>
               {addUserStates[user._id] ? (
-                <div className="flex justify-end w-full text-red-700">
+                <div className="flex justify-end w-full  text-red-700">
                   <button onClick={() => toggleAddUserState(user._id)}>
                     <UserCheck />
                   </button>

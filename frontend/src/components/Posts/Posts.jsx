@@ -46,7 +46,7 @@ export default function Posts() {
   };
 
   return (
-    <main className="w-full h-full">
+    <main className="flex justify-center item w-full h-full">
       <div className="flex flex-col items-center gap-5">
         {[...posts].reverse().map((post, index) => (
           <div

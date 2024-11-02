@@ -87,7 +87,7 @@ export default function Rightbar() {
           Find New Friends
         </button>
       </div>
-      <div className="fixed inset-0 z-[99999999] flex justify-end items-end">
+      <div className="  z-[99999999] flex justify-end items-end">
         <Messenger/>
         </div>
     </div>
