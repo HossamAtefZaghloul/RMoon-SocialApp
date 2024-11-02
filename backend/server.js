@@ -17,10 +17,9 @@ import { get_friend_req } from './controller/HandleFriends/get_friend_req.js';
 import { get_user } from './controller/get_user.js';
 import { handle_friend_request } from './controller/HandleFriends/friendRequest.js';
 import { get_acceptes_friend_req } from './controller/HandleFriends/get_acceptes_friend_req.js';
-import {User} from "./models/User.js"
 import jwt from 'jsonwebtoken';
 import { accept_friends } from './controller/HandleFriends/accept_friends.js';
-
+import {profile_image}from './controller/profile_image.js';
 const app = express(); 
 dotenv.config(); 
 
@@ -93,25 +92,7 @@ app.get('/api/acceptedfriends', authenticateToken, get_acceptes_friend_req);
 app.delete('/Posts/:postID',deletePosts);
 app.post('/api/friendrequest', handle_friend_request);
 app.post('/api/accept_fiends', accept_friends)
-app.post("/profilepic", upload.single("image"), async (req, res) => {
-  try {    
-    const {userId } = req.body;
-    console.log(userId)
-    // console.log("ghff")
-    const image = req.file.path.substring(req.file.path.indexOf("public\\"));
-
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { profilePicture: image}, 
-      { new: true } 
-    );
-
-    res.status(200).json(updatedUser.
-      profilePicture);
-  } catch (error) {
-    res.status(500).json({ message: "Error updating profile picture", error });
-  }
-});
+app.post("/profilepic", upload.single("image"),profile_image )
 
 
 
