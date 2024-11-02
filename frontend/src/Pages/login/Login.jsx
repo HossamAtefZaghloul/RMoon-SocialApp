@@ -1,15 +1,30 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [handleErorr, setHandleErorr] = useState(null);
+  const [handleError, setHandleError] = useState(null);
   const [msgColor, setMsgColor] = useState(null);
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        localStorage.removeItem("token");
+      } else {
+        navigate("/home");
+      }
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,16 +36,9 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:5000/login", formData);
 
-      if (res.data === "InvalidEmail") {
-        console.log(res.data);
+      if (res.data === "InvalidEmail" || res.data === "InvalidPassword") {
         setMsgColor(false);
-        setHandleErorr(
-          "Invalid login credentials. Please check your username and password and try again."
-        );
-      } else if (res.data === "InvalidPassword") {
-        console.log(res.data);
-        setMsgColor(false);
-        setHandleErorr(
+        setHandleError(
           "Invalid login credentials. Please check your username and password and try again."
         );
       } else if (res.data.token) {
@@ -38,12 +46,10 @@ const Login = () => {
         const user = res.data.user;
         localStorage.setItem("token", token);
 
-        console.log(user);
         setUser(user);
-
-        console.log(token);
         setMsgColor(true);
-        setHandleErorr("Logged in successfully! , redirecting ...");
+        setHandleError("Logged in successfully! Redirecting...");
+
         setTimeout(() => {
           navigate("/home");
         }, 1000);
@@ -55,9 +61,8 @@ const Login = () => {
 
   return (
     <div className="bg-[url('../../.././wallpaper.jpg')] bg-cover bg-center bg-no-repeat flex items-center justify-center h-screen">
-      <div className="bg-white p-8  rounded-lg shadow-md w-96 backdrop-blur-md bg-opacity-60">
+      <div className="bg-white p-8 rounded-lg shadow-md w-96 backdrop-blur-md bg-opacity-60">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
@@ -81,7 +86,7 @@ const Login = () => {
                 msgColor ? "text-green-500" : "text-red-500"
               } text-sm font-bold mb-2`}
             >
-              {handleErorr}
+              {handleError}
             </span>
           </div>
           <div className="mb-6">
@@ -102,7 +107,6 @@ const Login = () => {
               required
             />
           </div>
-
           <div className="flex items-center justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold focus:outline-none focus:shadow-outline rounded w-full py-2 px-3"
@@ -113,7 +117,7 @@ const Login = () => {
           </div>
         </form>
         <p className="mt-4 text-center text-gray-600 text-sm">
-          Don`t have an account?
+          Don’t have an account?{" "}
           <Link className="text-blue-500 hover:text-blue-700" to="/signUp">
             SignUp
           </Link>

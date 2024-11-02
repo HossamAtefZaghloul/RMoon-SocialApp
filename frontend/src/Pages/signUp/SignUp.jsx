@@ -28,9 +28,9 @@ const SignUp = () => {
         },
       });
 
-      if (res.data === "exist") {
+      if (res.data.message === "Email already exists.") {
         setHandleEmailErorr("Oops! An account with this email already exists!");
-      } else if ("newUser") {
+      } else if (res.data.message === "User created successfully.") {
         setsignupMesg(
           "Your account has been created successfully! , redirecting to Login..."
         );
@@ -127,7 +127,7 @@ const SignUp = () => {
               const selectedFile = e.target.files[0];
               setImage(selectedFile);
               setProfilePic(URL.createObjectURL(selectedFile));
-              console.log(selectedFile);
+              // console.log(selectedFile);
             }}
           />
           <div className="flex items-center justify-between">

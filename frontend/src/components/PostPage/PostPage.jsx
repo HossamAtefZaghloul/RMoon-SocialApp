@@ -4,15 +4,14 @@ import { UserContext } from "../useContexts/UserProvider.jsx";
 import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 
-export default function PostPage(setPostPage) {
+export default function PostPage() {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); // State to track submission status
   const { user } = useContext(UserContext);
   const userId = user.id;
   const timeAgo = new Date();
-  const storedData = localStorage.getItem("token");
-  const token = storedData; // next TASK
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -20,15 +19,15 @@ export default function PostPage(setPostPage) {
       const imagePreviewUrl = URL.createObjectURL(file);
       setImage(file);
       setImagePreview(imagePreviewUrl);
-      return () => {
-        if (imagePreview) {
-          setPostPage(false);
-        }
-      };
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting) return; // Prevent further submissions if already submitting
+
+    setIsSubmitting(true); // Set loading state to true
     const formData = new FormData();
 
     formData.append("content", content);
@@ -49,9 +48,13 @@ export default function PostPage(setPostPage) {
       );
       if (res.data === "New post created") {
         window.location.reload();
-      } else console.log(res.data.message);
+      } else {
+        console.log(res.data.message);
+      }
     } catch (e) {
       console.log(e);
+    } finally {
+      setIsSubmitting(false); 
     }
   };
 
@@ -68,13 +71,10 @@ export default function PostPage(setPostPage) {
             Content
           </label>
           <Textarea
-            onChange={(e) => {
-              setContent(e.target.value);
-              // console.log(content);
-            }}
+            onChange={(e) => setContent(e.target.value)}
             color="danger"
             minRows={2}
-            placeholder={"What is in your mind " + user.username + "."}
+            placeholder={`What is in your mind, ${user.username}?`}
             size="lg"
             variant="outlined"
           />
@@ -108,9 +108,10 @@ export default function PostPage(setPostPage) {
 
         <button
           type="submit"
-          className="w-full bg-red-700 text-white p-2 rounded hover:bg-red-800"
+          className={`w-full ${isSubmitting ? "bg-red-600" : "bg-red-700"} text-white p-2 rounded hover:bg-red-800`}
+          disabled={isSubmitting} // Disable button if submitting
         >
-          Submit
+          {isSubmitting ? "Submitting..." : "Submit"}
         </button>
       </form>
     </div>

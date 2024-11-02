@@ -23,7 +23,7 @@ export const signUp = async (req, res) => {
     const checkEmail = await User.findOne({ email }); 
 
     if (checkEmail) {
-      return res.status(409).json({ message: "Email already exists." });
+      return res.json({ message: "Email already exists." });
     } else {
 
       const newUser = new User({
@@ -34,7 +34,7 @@ export const signUp = async (req, res) => {
       });
 
       await newUser.save(); 
-      return res.status(201).json({ message: "User created successfully." });
+      return res.json({ message: "User created successfully." });
     }
   } catch (error) {
     console.error('Sign-up error:', error); 

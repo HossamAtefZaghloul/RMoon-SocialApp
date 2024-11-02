@@ -7,12 +7,11 @@ const ProtectedRoute = ({ children }) => {
 
     useEffect(() => {
         if (!token) {
-        
-            navigate('/login'); 
+            navigate('/login');
         }
-    }, []); 
+    }, [token]); 
 
-  
-    return children;}
+    return token ? children : null; 
+};
 
 export default ProtectedRoute;
