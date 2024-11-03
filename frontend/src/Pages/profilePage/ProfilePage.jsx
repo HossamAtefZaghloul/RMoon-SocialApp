@@ -5,17 +5,18 @@ import Profile from "../../components/profile/Profile";
 
 export default function ProfilePage() {
   return (
-    <div>
-      <Navbar />
-
-      <div className=" flex h-full bg-[#18191A]">
-        <div className="flex-[2] sticky h-[calc(100vh-58px)] top-[58px] ">
+    <div className="flex flex-col bg-[#18191A] w-full h-full">
+      <div className="flex w-full h-full sticky top-0 z-50">
+      <Navbar/>
+      </div>
+      <div className=" flex  w-full h-full bg-[#18191A]">
+        <div className="flex-[2] sticky h-[calc(100vh-58px)] top-[58px] w-full ">
           <Sidebar />
         </div>
-        <div className=" h-full  flex-[6] flex flex-col items-center ">
+        <div className="flex-[3.5] flex flex-col items-center w-full h-full">
           <Profile />
         </div>
-        <div className=" flex-[2]  ">
+        <div className="flex-[2] sticky h-[calc(100vh-58px)] top-[58px] w-full">
           <Rigthbar />
         </div>
       </div>

@@ -58,7 +58,7 @@ export default function Posts() {
       {posts && posts.length > 0 && [...posts].reverse().map((post, index) => (
           <div
             key={index}
-            className="bg-[#242526] rounded-lg shadow p-6 w-full sm:w-[600px]"
+            className="bg-[#242526] rounded-lg shadow p-6 w-full  "
           >
             <div className="flex items-center mb-4">
               <img

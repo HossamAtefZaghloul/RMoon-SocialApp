@@ -11,9 +11,9 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <div className="bg-[#18191A] border-r h-full border-gray-700  ">
-      <nav className="flex flex-col">
-      <div className=" border-t border-gray-700">
+    <div className="bg-[#18191A] border-r h-full w-full border-gray-700 ">
+      <nav className="flex flex-col w-full h-full">
+      <div className="border-gray-700 w-full h-full">
         <ul className="space-y-2 py-4">
           <li>
             <Link
@@ -70,7 +70,7 @@ export default function Sidebar() {
           </li>
         </ul> 
         </div>
-        <div className=" border-t border-gray-700">
+        <div className="border-t border-gray-700">
         <ul className="space-y-2">
           <li>
             <Link

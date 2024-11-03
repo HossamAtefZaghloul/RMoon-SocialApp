@@ -4,15 +4,15 @@ import axios from "axios";
 import { Search, Users } from "lucide-react";
 import jwt_decode from "jwt-decode";
 import "./rightbar.css";
-import Messenger from "./Messenger" 
+import Messenger from "./Messenger";
 
 const fetchFriends = async (token) => {
   const response = await axios.get("http://localhost:5000/api/acceptedfriends", {
     headers: { Authorization: `Bearer ${token}` },
   });
-  return response.data; 
+  return response.data;
 };
-//
+
 export default function Rightbar() {
   const [query, setQuery] = useState("");
   const token = localStorage.getItem("token");
@@ -32,27 +32,24 @@ export default function Rightbar() {
   if (isError) return <p>Error loading friends list.</p>;
 
   const filteredFriends = allFriends?.filter((friend) => {
-    const friendUsername = friend.requester.username; 
+    const friendUsername = friend.requester.username;
     return friendUsername.toLowerCase().includes(query.toLowerCase());
   });
 
   return (
-    <div className="bg-[#18191A] flex flex-col border-l border-gray-700 sticky h-[calc(100vh-58px)] top-[58px]">
-      <div className="p-4">
-        <h2 className="text-xl font-semibold text-white mb-4">Friends</h2>
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search friends..."
-            className="bg-[#242526] w-full pl-10 pr-4 py-2 border border-[#242526] rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-        </div>
+    <div className="bg-[#18191A] flex flex-col w-full h-full border-l border-gray-700 p-6 relative">
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Search friends..."
+          className="bg-[#242526] w-full pl-10 pr-4 py-2 border border-[#242526] rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
       </div>
-      <div className="flex-1 overflow-y-auto sidebar">
-        <ul className="space-y-2">
+      <div className="flex-1 overflow-y-auto">
+        <ul className="flex flex-col space-y-2">
           {filteredFriends && filteredFriends.length > 0 ? (
             filteredFriends.map((friend) => (
               friend.status === "accepted" && (
@@ -78,18 +75,17 @@ export default function Rightbar() {
           )}
         </ul>
       </div>
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 w-full border-t border-gray-700">
         <button
-          className="flex items-center justify-center w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
-          onClick={refetch} 
+          className="flex sm:text-[11px] xs:text-[5px] items-center justify-center w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+          onClick={refetch}
         >
-          <Users className="h-5 w-5 mr-2" />
+          <Users className="h-5 w-5 mr-1 sm:w-3 sm:h-3 xs:w-3 xs:h-3" />
           Find New Friends
         </button>
       </div>
-      <div className="  z-[99999999] flex justify-end items-end">
-        <Messenger/>
-        </div>
+      {/* Messenger positioned absolutely on the left */}
+      
     </div>
   );
 }
