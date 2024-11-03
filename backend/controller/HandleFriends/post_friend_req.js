@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Friends } from '../../models/Friends.js';
 
-export const handle_friend_request = async (req, res) => {
+export const post_friend_request = async (req, res) => {
   const { userA, userB } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(userA) || !mongoose.Types.ObjectId.isValid(userB)) {

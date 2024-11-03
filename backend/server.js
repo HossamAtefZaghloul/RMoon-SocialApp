@@ -8,18 +8,17 @@ import fs from 'fs';
 import { fileURLToPath } from 'url'; 
 import { signUp } from './controller/handleSignup.js';  
 import { login } from './controller/handleLogin.js';  
-import { createPost }from './controller/handlePosts.js';  
-import { deletePosts }from './controller/deletePosts.js';  
-import { DisplayingPosts } from './controller/DisplayingPosts.js';
-import { fetchUsers } from './controller/fetchUsers.js';
-import { GetUsers } from './controller/GetUsers.js';
-import { get_friend_req } from './controller/HandleFriends/get_friend_req.js';
-import { get_user } from './controller/get_user.js';
-import { handle_friend_request } from './controller/HandleFriends/friendRequest.js';
-import { get_acceptes_friend_req } from './controller/HandleFriends/get_acceptes_friend_req.js';
+import { create_post }from './controller/create_post.js';  
+import { delete_post }from './controller/delete_post.js';  
+import { get_user_posts } from './controller/get_user_posts.js';
+import { fetch_users } from './controller/get_users.js';
+import { fetch_friends_request } from './controller/HandleFriends/get_friends_request.js';
+import { get_wallpaper } from './controller/get_wallpaper.js';
+import { post_friend_request } from './controller/HandleFriends/post_friend_req.js';
+import { get_accepted_friend } from './controller/HandleFriends/get_accepted_friends.js';
 import jwt from 'jsonwebtoken';
-import { accept_friends } from './controller/HandleFriends/accept_friends.js';
-import {profile_image}from './controller/profile_image.js';
+import { accept_friends } from './controller/HandleFriends/post_accepted_friend.js';
+import {post_wallpaper}from './controller/post_wallpaper.js';
 const app = express(); 
 dotenv.config(); 
 
@@ -79,23 +78,23 @@ const authenticateToken = (req, res, next) => {
     next(); 
   });
 };
-// routess
-app.post('/SignUp', upload.single('image'), signUp); 
-app.post('/login',upload.none(), login);
-app.post('/createpost',upload.single('image'), createPost);
-app.get('/api/users', authenticateToken, fetchUsers);
-app.get('/search/users', authenticateToken, GetUsers);
-app.get('/api/users/me/posts', authenticateToken, DisplayingPosts);
-app.get('/Profile/user', authenticateToken, get_user);
-app.get('/getfriends', authenticateToken, get_friend_req);
-app.get('/api/acceptedfriends', authenticateToken, get_acceptes_friend_req);
-app.delete('/Posts/:postID',deletePosts);
-app.post('/api/friendrequest', handle_friend_request);
-app.post('/api/accept_fiends', accept_friends)
-app.post("/profilepic", upload.single("image"),profile_image )
 
-
-
-
+// Auth routes
+app.post('/api/auth/signup', upload.single('image'), signUp);
+app.post('/api/auth/login', upload.none(), login);
+// Post routes
+app.post('/api/posts', upload.single('image'), create_post);
+app.delete('/api/delete/post/:postID', authenticateToken, delete_post);
+app.get('/api/get/user/posts', authenticateToken, get_user_posts);
+// WALLPAPER routes
+app.get('/Profile/wallpaper', authenticateToken, get_wallpaper);
+app.post("/profilepic", upload.single("image"), post_wallpaper )
+// Users routes
+app.get('/api/search/users', authenticateToken, fetch_users);
+// Firends routes
+app.get('/api/get/friends', authenticateToken, fetch_friends_request);
+app.get('/api/acceptedfriends', authenticateToken, get_accepted_friend);
+app.post('/api/friendrequest', authenticateToken, post_friend_request);
+app.post('/api/accept_fiends', authenticateToken, accept_friends);
 
 

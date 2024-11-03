@@ -38,7 +38,7 @@ export default function PostPage() {
     console.log("Submitting post:", { content, image, userId, timeAgo });
     try {
       const res = await axios.post(
-        "http://localhost:5000/createpost",
+        "http://localhost:5000/api/posts",
         formData,
         {
           headers: {

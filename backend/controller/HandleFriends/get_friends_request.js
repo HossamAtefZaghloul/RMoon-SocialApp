@@ -1,6 +1,6 @@
 import { Friends } from '../../models/Friends.js';
 
-export const get_friend_req = async (req, res) => {
+export const fetch_friends_request = async (req, res) => {
     const userId = req.user.userId;
     try {
       // Only fetch requests where the user is the recipient and requester is different

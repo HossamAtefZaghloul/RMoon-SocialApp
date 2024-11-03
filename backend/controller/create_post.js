@@ -1,7 +1,7 @@
 import {User} from '../models/User.js'; 
 import {Post} from '../models/Posts.js';
 
-export const createPost = async (req, res) => {
+export const create_post = async (req, res) => {
     try {
         const image = req.file ? req.file.path.substring(req.file.path.indexOf("public\\")) : null;
         const { content, userId, timeAgo } = req.body;

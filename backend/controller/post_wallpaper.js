@@ -1,6 +1,6 @@
 import {User} from "../models/User.js"
 
-export const profile_image = async (req, res) => {
+export const post_wallpaper = async (req, res) => {
     try {    
       const {userId } = req.body;
       console.log(userId)

@@ -1,6 +1,6 @@
 import { Friends } from '../../models/Friends.js';
 
-export const get_acceptes_friend_req = async (req, res) => {
+export const get_accepted_friend = async (req, res) => {
     const userId = req.user.userId;
     try {
       const friendsList = await Friends.find({

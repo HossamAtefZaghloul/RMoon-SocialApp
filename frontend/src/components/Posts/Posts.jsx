@@ -14,7 +14,7 @@ export default function Posts() {
   const token = localStorage.getItem("token");
 
   const { isLoading, data, error } = useFetch(
-    "http://localhost:5000/api/users/me/posts",
+    "http://localhost:5000/api/get/user/posts",
     token
   );
   useEffect(() => {
@@ -31,7 +31,12 @@ export default function Posts() {
     e.preventDefault();
     try {
       const response = await axios.delete(
-        `http://localhost:5000/Posts/${postID}`
+        `http://localhost:5000/api/delete/post/${postID}`,
+        {
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass token in headers
+        },
+      }
       );
       console.log("Success:", response.data);
       // Update posts in the state after successful deletion

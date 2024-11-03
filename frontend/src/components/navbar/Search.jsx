@@ -26,6 +26,11 @@ export default function UserSearch() {
         const res = await axios.post("http://localhost:5000/api/friendrequest", {
           userA,
           userB,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass token in headers
+          },
         });
         console.log("Friend request sent:", res);
       } catch (e) {
@@ -37,7 +42,7 @@ export default function UserSearch() {
   }, [userB]);
 
   const { data, isLoading, error } = useFetch(
-    "http://localhost:5000/api/users",
+    "http://localhost:5000/api/search/users",
     token
   );
 

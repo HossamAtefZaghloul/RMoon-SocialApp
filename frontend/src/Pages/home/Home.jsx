@@ -13,9 +13,10 @@ const Home = () => {
             <Sidebar />
           </div>
           <div className=" flex-[3.5] flex flex-col items-center ">
+          <MainContent/>
           </div>
           <div className=" flex-[2]">
-  
+          <Rigthbar/>
           </div>
         </div>
       </div>

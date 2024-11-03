@@ -1,6 +1,6 @@
 import { User } from '../models/User.js';
 
-export const fetchUsers = async (req, res) => {
+export const fetch_users = async (req, res) => {
   const userId = req.user.userId;
   try {
     const users = await User.find({ _id: { $ne: userId } });

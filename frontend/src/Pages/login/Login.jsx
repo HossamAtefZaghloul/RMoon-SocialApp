@@ -34,7 +34,7 @@ const Login = () => {
     formData.append("password", password);
 
     try {
-      const res = await axios.post("http://localhost:5000/login", formData);
+      const res = await axios.post("http://localhost:5000/api/auth/login", formData);
 
       if (res.data === "InvalidEmail" || res.data === "InvalidPassword") {
         setMsgColor(false);

@@ -22,7 +22,7 @@ const SignUp = () => {
     formData.append("password", password);
 
     try {
-      const res = await axios.post("http://localhost:5000/SignUp", formData, {
+      const res = await axios.post("http://localhost:5000/api/auth/signup", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -1,6 +1,6 @@
 import { User } from '../models/User.js';
 
-export const get_user = async (req, res) => {
+export const get_wallpaper = async (req, res) => {
   try {
     const userId = req.user.userId;
     const user = await User.findById(userId);

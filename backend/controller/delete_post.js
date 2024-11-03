@@ -1,6 +1,6 @@
 import  { Post } from '../models/Posts.js';
 
-export const deletePosts = async (req, res) => {
+export const delete_post = async (req, res) => {
   try { 
     const postID = req.params.postID;
     const result = await Post.findByIdAndDelete(postID);

@@ -17,7 +17,7 @@ export default function Profile() {
   const tokenData = jwt_decode(token);
   const userId = tokenData.userId;
 
-  const { data } = useFetch(`${server}Profile/user`, token);
+  const { data } = useFetch("http://localhost:5000/Profile/wallpaper", token);
 
   useEffect(() => {
     if (data) setProfilePic(data);

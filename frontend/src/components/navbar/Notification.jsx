@@ -9,7 +9,7 @@ const Notification = () => {
   const server = "http://localhost:5000/";
   const token = localStorage.getItem("token");
 
-  const { data } = useFetch("http://localhost:5000/getfriends", token);
+  const { data } = useFetch("http://localhost:5000/api/get/friends", token);
 
   useEffect(() => {
     if (data) {
@@ -19,9 +19,13 @@ const Notification = () => {
 
   const handleSubmit = async (requestId) => {
     try {
-      await axios.post("http://localhost:5000/api/accept_fiends", {
-        friendRequestID: requestId
-      });
+      await axios.post("http://localhost:5000/api/accept_fiends",{friendRequestID: requestId} ,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass token in headers
+          },
+        }
+      );
       setUserB(prev => prev.filter(user => user._id !== requestId));
       setNotificationsOpen(false); // Close notifications after accepting
     } catch (e) {
