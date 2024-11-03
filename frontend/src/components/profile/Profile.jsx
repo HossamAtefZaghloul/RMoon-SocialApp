@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect, useCallback } from "react";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
-import useFetch from "../customHooks/UseFetch.jsx";
 import { MessageCircle, UserPlus, Settings, Camera } from "lucide-react";
 import axios from "axios";
 import Posts from "../Posts/Posts.jsx";
 import jwt_decode from "jwt-decode";
+import { useQuery} from "@tanstack/react-query";
 
 export default function Profile() {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -12,16 +12,24 @@ export default function Profile() {
   const server = "http://localhost:5000/";
   const { user } = useContext(UserContext);
   const [file, setFile] = useState(null);
-  const [profilePic, setProfilePic] = useState(null);
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
   const userId = tokenData.userId;
 
-  const { data } = useFetch("http://localhost:5000/Profile/wallpaper", token);
+  const { data: profilePic, refetch } = useQuery({
+    queryKey: ["profilePic"],
+    queryFn: async () => {
+      const res = await axios.get(`${server}Profile/wallpaper`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data;
+    },
+    cacheTime: 5 * 60 * 1000, // Cache data for 5 minutes
+    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
+  });
 
-  useEffect(() => {
-    if (data) setProfilePic(data);
-  }, [data]);
+
+
 
   const handleFileChange = useCallback((e) => {
     const selectedFile = e.target.files[0];
@@ -43,7 +51,7 @@ export default function Profile() {
           } 
         );
           if (res){
-            window.location.reload()
+            refetch()
           }
         } catch (error) {
           console.error("Error uploading profile picture:", error);
@@ -51,8 +59,9 @@ export default function Profile() {
       };
 
       uploadProfilePic();
+      
     }
-  }, [file, server, userId]);
+  }, [file, server, userId, refetch]);
 
   const toggleFollow = () => {
     setIsFollowing((prev) => !prev);

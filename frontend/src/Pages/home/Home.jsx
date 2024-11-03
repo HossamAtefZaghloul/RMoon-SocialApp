@@ -9,10 +9,10 @@ const Home = () => {
            <Navbar />
          </div>
         <div className="flex">
-          <div className="flex-[2]">
+          <div className="flex-[2] w-full sticky h-[calc(100vh-57px)] top-[57px]">
             <Sidebar />
           </div>
-          <div className=" flex-[3.5] flex flex-col items-center ">
+          <div className="flex-[3.5] flex flex-col items-center ">
           <MainContent/>
           </div>
           <div className=" flex-[2]">

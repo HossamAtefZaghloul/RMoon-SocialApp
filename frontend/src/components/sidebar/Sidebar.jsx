@@ -8,12 +8,12 @@ import {
   CircleUser,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 export default function Sidebar() {
   return (
-    <div className="bg-[#18191A] flex flex-col border-r border-gray-700 sticky h-[calc(100vh-58px)] top-[58px] ">
-      <nav className="flex-1 overflow-y-auto">
+    <div className="bg-[#18191A] border-r h-full border-gray-700  ">
+      <nav className="flex flex-col">
+      <div className=" border-t border-gray-700">
         <ul className="space-y-2 py-4">
           <li>
             <Link
@@ -68,9 +68,9 @@ export default function Sidebar() {
               Events
             </Link>
           </li>
-        </ul>
-      </nav>
-      <div className="p-5 border-t border-gray-700">
+        </ul> 
+        </div>
+        <div className=" border-t border-gray-700">
         <ul className="space-y-2">
           <li>
             <Link
@@ -94,6 +94,8 @@ export default function Sidebar() {
           </li>
         </ul>
       </div>
+      </nav>
+      
     </div>
   );
 }
