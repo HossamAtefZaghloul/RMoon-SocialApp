@@ -1,31 +1,34 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import TimeAgo from "../TimeAgo/TimeAgo.jsx";
-import useFetch from "../customHooks/UseFetch.jsx";
+import { useQuery} from "@tanstack/react-query";
 
 export default function Posts() {
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
   const [deletePage, setDeletePage] = useState(false);
   const [postID, setPostID] = useState("");
-  const [posts, setPosts] = useState([]);
   const token = localStorage.getItem("token");
-
-  const { isLoading, data, error } = useFetch(
-    "http://localhost:5000/api/get/user/posts",
-    token
-  );
-  useEffect(() => {
-    if (data) {
-      setPosts(data);
-    }
-  }, [data]);
-  // console.log(data);
-
+  //
+  const { data: posts = [], refetch, isLoading, error } = useQuery({
+    queryKey: ["profilePic"],
+    queryFn: async () => {
+      const res = await axios.get("http://localhost:5000/api/get/user/posts ", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log("Data fetched:", res.data);
+      return res.data;
+    },
+    cacheTime: 5 * 60 * 1000, // Cache data for 5 minutes
+    staleTime: 5 * 60 * 1000  // Data is fresh for 5 minutes
+  });
+  
   if (isLoading) console.log(isLoading);
   if (error) console.log(error);
+
+  //
 
   const handlePostDelete = async (e) => {
     e.preventDefault();
@@ -34,13 +37,12 @@ export default function Posts() {
         `http://localhost:5000/api/delete/post/${postID}`,
         {
         headers: {
-          Authorization: `Bearer ${token}`, // Pass token in headers
+          Authorization: `Bearer ${token}`, 
         },
       }
       );
       console.log("Success:", response.data);
-      // Update posts in the state after successful deletion
-      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
+      refetch();
       setDeletePage(false);
     } catch (error) {
       console.error(
@@ -53,7 +55,7 @@ export default function Posts() {
   return (
     <main className="flex justify-center item w-full h-full">
       <div className="flex flex-col items-center gap-5">
-        {[...posts].reverse().map((post, index) => (
+      {posts && posts.length > 0 && [...posts].reverse().map((post, index) => (
           <div
             key={index}
             className="bg-[#242526] rounded-lg shadow p-6 w-full sm:w-[600px]"

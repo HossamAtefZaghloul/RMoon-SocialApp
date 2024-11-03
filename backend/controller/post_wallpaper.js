@@ -3,7 +3,7 @@ import {User} from "../models/User.js"
 export const post_wallpaper = async (req, res) => {
     try {    
       const {userId } = req.body;
-      console.log(userId)
+      // console.log(userId)
       // console.log("ghff")
       const image = req.file.path.substring(req.file.path.indexOf("public\\"));
   

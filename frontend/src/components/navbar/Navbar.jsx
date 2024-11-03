@@ -4,11 +4,13 @@ import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../components/useContexts/UserProvider.jsx";
 import UserSearch from "./Search.jsx";
 import Notification from './Notification.jsx'
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CompactNavbar() {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
+  const queryClient = useQueryClient(); 
 
 
   return (
@@ -46,6 +48,7 @@ export default function CompactNavbar() {
                 onClick={() => {
                   // localStorage.clear();
                   localStorage.removeItem("token");
+                  queryClient.clear()
                   navigate("/login");
                 }}
               >

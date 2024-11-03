@@ -15,27 +15,24 @@ export default function Profile() {
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
   const userId = tokenData.userId;
-
-  const { data: profilePic, refetch } = useQuery({
-    queryKey: ["profilePic"],
-    queryFn: async () => {
-      const res = await axios.get(`${server}Profile/wallpaper`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return res.data;
-    },
-    cacheTime: 5 * 60 * 1000, // Cache data for 5 minutes
-    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
-  });
-
-
-
-
   const handleFileChange = useCallback((e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
   }, []);
-
+//
+  const { data: profilePic = null, refetch } = useQuery({
+    queryKey: ["/Profile/wallpaper"],
+    queryFn: async () => {
+      const res = await axios.get("http://localhost:5000/Profile/wallpaper", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      return res.data;
+    },
+    cacheTime: 5 * 60 * 1000, // Cache data for 5 minutes
+    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
+  }); console.log(profilePic)
+//
   useEffect(() => {
     if (file) {
       const formData = new FormData();
@@ -61,7 +58,7 @@ export default function Profile() {
       uploadProfilePic();
       
     }
-  }, [file, server, userId, refetch]);
+  }, [file]);
 
   const toggleFollow = () => {
     setIsFollowing((prev) => !prev);

@@ -11,7 +11,7 @@ export const get_user_posts = async (req, res) => {
     if (posts.length === 0) {
       return res.status(404).json({ message: 'No posts found for this user' });
     }
-    console.log(posts)
+    // console.log(posts)
     res.status(200).json(posts);
   } catch (err) {
     console.error('Error fetching posts:', err);
