@@ -3,7 +3,7 @@ import axios from "axios";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { UserContext } from "../useContexts/UserProvider.jsx";
 import TimeAgo from "../TimeAgo/TimeAgo.jsx";
-import { useQuery} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function Posts() {
   const { user } = useContext(UserContext);
@@ -11,6 +11,8 @@ export default function Posts() {
   const [deletePage, setDeletePage] = useState(false);
   const [postID, setPostID] = useState("");
   const token = localStorage.getItem("token");
+  const queryClient = useQueryClient(); // Access queryClient
+
   //
   const { data: posts = [], refetch, isLoading, error } = useQuery({
     queryKey: ["profilePic"],
@@ -42,7 +44,7 @@ export default function Posts() {
       }
       );
       console.log("Success:", response.data);
-      refetch();
+      queryClient.invalidateQueries(["profilePic"]); // Invalidate and refetch posts
       setDeletePage(false);
     } catch (error) {
       console.error(
@@ -58,7 +60,7 @@ export default function Posts() {
       {posts && posts.length > 0 && [...posts].reverse().map((post, index) => (
           <div
             key={index}
-            className="bg-[#242526] rounded-lg shadow p-6 w-full  "
+            className="bg-[#242526] rounded-lg shadow p-6 w-full md:w-[600px] lg:w-[600px]"
           >
             <div className="flex items-center mb-4">
               <img

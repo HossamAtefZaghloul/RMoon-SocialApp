@@ -13,7 +13,7 @@ export default function CreatePosts() {
   }, []);
 
   return (
-    <main className="flex flex-col p-6 w-full  ">
+    <main className="flex flex-col p-6 w-full h-full ">
         <div className="bg-[#242526] flex flex-col rounded-lg shadow p-2 mb-6 justify-center">
           <div className="flex gap-1 p-2 m-2">
             <img

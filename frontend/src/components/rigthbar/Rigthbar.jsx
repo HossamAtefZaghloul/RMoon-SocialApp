@@ -1,24 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import axios from "axios";
 import { Search, Users } from "lucide-react";
 import jwt_decode from "jwt-decode";
 import "./rightbar.css";
 import Messenger from "./Messenger";
 
-const fetchFriends = async (token) => {
-  const response = await axios.get("http://localhost:5000/api/acceptedfriends", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return response.data;
-};
-
 export default function Rightbar() {
   const [query, setQuery] = useState("");
+  const [friendChat, setFriendChat] = useState("");
+  const [toggleChat, setToggleChat] = useState("");
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
+  //
   const userId = tokenData.userId;
-
+  const handleToggleFalse = () => {
+    setToggleChat(false);
+  };
+  //
+  const fetchFriends = async () => {
+    const response = await axios.get("http://localhost:5000/api/acceptedfriends", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  };
   const { data: allFriends, isLoading, isError, refetch } = useQuery({
     queryKey: ["acceptedFriends", token],
     queryFn: () => fetchFriends(token),
@@ -54,7 +59,10 @@ export default function Rightbar() {
             filteredFriends.map((friend) => (
               friend.status === "accepted" && (
                 <li key={friend._id} className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg">
-                  <div onClick={() => { console.log(friend.requester.username); }} className="flex items-center cursor-pointer">
+                  <div onClick={() => {
+                    setFriendChat(friend.requester._id === userId ? friend.recipient : friend.requester);
+                    setToggleChat(true)}}
+                    className="flex items-center cursor-pointer">
                     <img
                       src={`http://localhost:5000/${friend.requester._id === userId ? friend.recipient.image : friend.requester.image}`}
                       alt={friend.requester.username}
@@ -83,9 +91,23 @@ export default function Rightbar() {
           <Users className="h-5 w-5 mr-1 sm:w-3 sm:h-3 xs:w-3 xs:h-3" />
           Find New Friends
         </button>
-      </div>
-      {/* Messenger positioned absolutely on the left */}
-      
-    </div>
+              </div>
+              {toggleChat && (
+              <div
+            onClick={() => {
+              setToggleChat(false);
+            }}
+            className="fixed inset-0 z-[999999] flex justify-end items-end right-[410px] bg-opacity-90 "
+          >
+            <div onClick={(e) => e.stopPropagation()}>
+              <Messenger 
+              friendChat={friendChat}
+              handleToggleFalse={handleToggleFalse}
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        )}
+            </div>
   );
 }
