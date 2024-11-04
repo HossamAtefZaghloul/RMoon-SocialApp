@@ -9,18 +9,12 @@ export default function Messenger({friendChat,handleToggleFalse}) {
   const server = "http://localhost:5000/";
   const [message, setMessage] = useState("")
   const scrollAreaRef = useRef(null)
-  const endOfMessagesRef = useRef(null);
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
   const sender = tokenData.userId;
   const receiverId  = friendChat._id;
 
-  // Scroll to the end of the messages when friendChat or newMessage changes
-  useEffect(() => {
-    if (endOfMessagesRef.current) {
-      endOfMessagesRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [friendChat, newMessage]);
+
 
  // handle time
  function formatTimestampToDayAndTime(timestamp) {
