@@ -20,27 +20,24 @@
   import { get_accepted_friend } from './controller/HandleFriends/get_accepted_friends.js';
   import jwt from 'jsonwebtoken';
   import { accept_friends } from './controller/HandleFriends/post_accepted_friend.js';
-  import {post_wallpaper}from './controller/post_wallpaper.js';
+  import {post_wallpaper} from './controller/post_wallpaper.js';
+  import initializeSocket from './controller/socketController.js'
   import { Server } from 'socket.io'; 
   import http from 'http'; 
-  import {socketController} from './controller/socketController.js';
-
 
   const app = express(); 
   dotenv.config(); 
   app.use(express.json()); 
   app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
   const PORT = process.env.PORT || 6001; 
+  const server = http.createServer(app); 
+  const io = new Server(server, {
+    cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] }
+  });
   mongoose.connect(process.env.MONGO_URL) 
-    .then(() => { 
-      const server = http.createServer(app); 
-      const io = new Server(server, {
-        cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] }
-      });
+    .then(() => {     
+      initializeSocket(io);
       server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-      io.on('connection', (socket) => {
-        socketController(io);
-      });
     }) 
     .catch((error) => console.log(`${error} did not connect`)); 
     

@@ -5,15 +5,21 @@ import { Search, Users } from "lucide-react";
 import jwt_decode from "jwt-decode";
 import "./rightbar.css";
 import Messenger from "./Messenger";
+import useToggle from "../CustomHook"
 
 export default function Rightbar() {
   const [query, setQuery] = useState("");
   const [friendChat, setFriendChat] = useState("");
-  const [toggleChat, setToggleChat] = useState("");
+  const [toggleChat, setToggleChat] = useToggle(false);
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
-  //
   const userId = tokenData.userId;
+  //
+  const handleFriendClick = (friend) => {
+    setToggleChat(friend._id);
+    setFriendChat(friend.requester._id === userId ? friend.recipient : friend.requester);
+  };
+  //
   const handleToggleFalse = () => {
     setToggleChat(false);
   };
@@ -25,7 +31,7 @@ export default function Rightbar() {
     return response.data;
   };
   const { data: allFriends, isLoading, isError, refetch } = useQuery({
-    queryKey: ["acceptedFriends", token],
+    queryKey: [["acceptedFriends"], token],
     queryFn: () => fetchFriends(token),
     enabled: !!token,
     refetchOnWindowFocus: true,
@@ -59,9 +65,7 @@ export default function Rightbar() {
             filteredFriends.map((friend) => (
               friend.status === "accepted" && (
                 <li key={friend._id} className="px-4 py-2 hover:bg-gray-700 transition-colors duration-200 rounded-lg">
-                  <div onClick={() => {
-                    setFriendChat(friend.requester._id === userId ? friend.recipient : friend.requester);
-                    setToggleChat(true)}}
+                  <div onClick={() => handleFriendClick(friend)}
                     className="flex items-center cursor-pointer">
                     <img
                       src={`http://localhost:5000/${friend.requester._id === userId ? friend.recipient.image : friend.requester.image}`}

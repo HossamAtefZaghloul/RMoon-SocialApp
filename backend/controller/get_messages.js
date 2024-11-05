@@ -5,9 +5,9 @@ export const fetch_messages = async (req, res) => {
   try {
     const userId = req.user.userId; 
     const { receiverId } = req.params;
-    console.log(userId)
-    console.log(receiverId)
-    console.log("reterer4234234324324")
+    // console.log(userId)
+    // console.log(receiverId)
+    // console.log("reterer4234234324324")
 
     if (!receiverId || !mongoose.Types.ObjectId.isValid(receiverId)) {
       return res.status(400).json({ message: 'Invalid or missing receiver ID' });
@@ -23,7 +23,7 @@ export const fetch_messages = async (req, res) => {
     if (messages.length === 0) {
       return res.status(404).json({ message: 'No messages found' });
     }
-    console.log(messages)
+    // console.log(messages)
 
     res.status(200).json(messages);
   } catch (err) {

@@ -1,21 +1,37 @@
-// socketController.js
-export  function socketController(io) {
-  io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
+import { Message } from '../models/Message.js';
 
-    // Listen for sendMessage events
-    socket.on('sendMessage', (messageData) => {
-      const { sender, receiverId, content } = messageData;
-      const message = { sender, receiver: receiverId, content, timestamp: new Date() };
+export default function initializeSocket(io) {
+  io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
 
-      // Broadcast the message to the specific receiver only
-      io.to(receiverId).emit('receiveMessage', message); 
-
-      // (Optional) Save message to the database here if needed
+    // Join user to their unique room
+    socket.on("joinRoom", (userId) => {
+      socket.join(userId);
+      console.log(`User ${userId} joined room ${userId}`);
     });
 
-    socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.id);
+    // Handle sendMessage event
+    socket.on("sendMessage", async (data) => {
+      const { sender, receiverId, message } = data;
+      const newMessage = new Message({
+        sender,
+        receiver: receiverId,
+        content: message,
+        timestamp: new Date().toISOString(),
+      });
+      await newMessage.save();
+
+      // Emit the message to the receiver's room
+      io.to(receiverId).emit("receiveMessage", {
+        sender,
+        content: message,
+        timestamp: newMessage.timestamp,
+      });
+    });
+
+    // Handle disconnection
+    socket.on("disconnect", () => {
+      console.log(`User disconnected: ${socket.id}`);
     });
   });
 }
