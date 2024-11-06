@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect} from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Search, Users } from "lucide-react";
 import jwt_decode from "jwt-decode";

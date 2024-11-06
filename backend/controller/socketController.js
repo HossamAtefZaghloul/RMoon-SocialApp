@@ -4,7 +4,7 @@ export default function initializeSocket(io) {
   io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    // Join user to their unique room
+    // Join room 
     socket.on("joinRoom", (userId) => {
       socket.join(userId);
       console.log(`User ${userId} joined room ${userId}`);
@@ -13,6 +13,12 @@ export default function initializeSocket(io) {
     // Handle sendMessage event
     socket.on("sendMessage", async (data) => {
       const { sender, receiverId, message } = data;
+      // Check if content is valid
+      if (!message || typeof message !== "string" || !message.trim()) {
+        socket.emit("messageError", { error: "Message content cannot be empty" });
+        console.log("Message content is not valid. Ignoring message.");
+        return;
+      }
       const newMessage = new Message({
         sender,
         receiver: receiverId,
