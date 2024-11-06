@@ -16,6 +16,7 @@
   import { get_wallpaper } from './controller/get_wallpaper.js';
   import { post_friend_request } from './controller/HandleFriends/post_friend_req.js';
   import { Messenger } from './controller/Messanger.js';
+  import { handleLikes } from './controller/handle_likes.js';
   import { fetch_messages } from "./controller/get_messages.js"
   import { get_accepted_friend } from './controller/HandleFriends/get_accepted_friends.js';
   import jwt from 'jsonwebtoken';
@@ -94,6 +95,7 @@
   app.post('/api/posts', upload.single('image'), create_post);
   app.delete('/api/delete/post/:postID', authenticateToken, delete_post);
   app.get('/api/get/user/posts', authenticateToken, get_user_posts);
+  app.post('/api/like/post',authenticateToken ,handleLikes); 
   // WALLPAPER routes
   app.get('/Profile/wallpaper', authenticateToken, get_wallpaper);
   app.post("/profilepic", upload.single("image"), post_wallpaper )
@@ -107,5 +109,4 @@
   // Messenager
   app.post('/Messenger',authenticateToken, Messenger)
   app.get(`/api/get/messages/:receiverId`, authenticateToken, fetch_messages);
-
 
