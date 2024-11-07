@@ -8,6 +8,7 @@ import { UserProvider } from "./components/useContexts/UserProvider.jsx";
 import { PostsProvider } from "./components/useContexts/PostProvider.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProfilePage from "./Pages/profilePage/ProfilePage.jsx";
+import Test from "./Pages/Test.jsx";
 
 function App() {
   const queryClient = new QueryClient();
@@ -18,6 +19,7 @@ function App() {
       <UserProvider>
         <BrowserRouter>
           <Routes>
+          <Route path="/test" element={<Test />} />
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signUp" element={<SignUp />} />

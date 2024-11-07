@@ -127,9 +127,9 @@ export default function Profile() {
                 <MessageCircle className="w-4 h-4 inline-block mr-2" />
                 Message
               </button>
-              <button className="p-2 bg-[#18191A] rounded-md text-red-800 w-6 h-6">
+              {/* <button className="p-2 bg-[#18191A] rounded-md text-red-800 w-6 h-6">
                 <UserPlus className="w-6 h-6" />
-              </button>
+              </button> */}
               <button className="p-2 bg-[#18191A] rounded-md text-red-800 w-6 h-6">
                 <Settings className="w-6 h-6" />
               </button>

@@ -1,24 +1,26 @@
 import { useContext, useState } from "react";
 import axios from "axios";
 import { Heart, MessageCircle, Share2, HeartCrack } from "lucide-react";
-import { UserContext } from "../useContexts/UserProvider.jsx";
-import TimeAgo from "../TimeAgo/TimeAgo.jsx";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { UserContext } from "../components/useContexts/UserProvider.jsx";
+import TimeAgo from "../components/TimeAgo/TimeAgo.jsx";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import jwt_decode from "jwt-decode";
 
-export default function Posts(profile) {
+const Test = () => {
+  const profile = true;
   const { user } = useContext(UserContext);
-  const server = "http://localhost:5000/";
-  const [deletePage, setDeletePage] = useState(false);
   const [postID, setPostID] = useState("");
   const token = localStorage.getItem("token");
   const tokenData = jwt_decode(token);
   const userId = tokenData.userId;
-  const queryClient = useQueryClient(); // Access queryClient
+  const queryClient = useQueryClient();
+  const server = "http://localhost:5000/";
 
-
+  // Query to fetch posts
   const {
     data: posts = [],
+    isLoading,
+    error,
   } = useQuery({
     queryKey: ["userPosts", profile],
     queryFn: async () => {
@@ -34,7 +36,8 @@ export default function Posts(profile) {
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
   });
-  //
+
+  // Mutation for liking a post with optimistic update
   const { mutateAsync: likePost } = useMutation({
     mutationFn: async (postid) => {
       const response = await axios.post(
@@ -45,8 +48,8 @@ export default function Posts(profile) {
             Authorization: `Bearer ${token}`,
           },
         }
-      );    
-      return response.data; 
+      );
+      return response.data; // This data can be used to update UI or invalidate queries
     },
     // Optimistic update
     onMutate: async (postid) => {
@@ -85,40 +88,9 @@ export default function Posts(profile) {
       queryClient.invalidateQueries(["userPosts", profile]);
     },
   });
-  //
-
-  const handlePostDelete = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/delete/post/${postID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Success:", response.data);
-      queryClient.invalidateQueries(["userPosts"]);
-      setDeletePage(false);
-    } catch (error) {
-      console.error(
-        "Error deleting resource:",
-        error.response ? error.response.data : error.message
-      );
-    }
-  };
-
-    const cachedData = queryClient.getQueryData(["userPosts", profile]);
-    if (cachedData) {
-      // console.log("Cached posts data:", cachedData);
-    } else {
-      // console.log("No cached data available for 'userPosts'");
-    }
-
 
   return (
-    <main className="flex justify-center item w-full h-full">
+    <main className="flex justify-center items-center w-full h-full">
       <div className="flex flex-col items-center gap-5">
         {posts &&
           posts.length > 0 &&
@@ -141,54 +113,7 @@ export default function Posts(profile) {
                     <TimeAgo eventTime={post.timeAgo} />
                   </p>
                 </div>
-                <div className="flex justify-end w-full">
-                  {profile.profile && (
-                    <button
-                      className="text-red-800 text-xl font-mono font-extrabold"
-                      onClick={() => {
-                        setPostID(post._id);
-                        setDeletePage(true);
-                      }}
-                    >
-                      x
-                    </button>
-                  )}
-                </div>
               </div>
-
-              {deletePage && postID === post._id && (
-                <div
-                  onClick={() => {
-                    setDeletePage(false);
-                  }}
-                  className="fixed inset-0 z-10 flex justify-center items-center bg-opacity-30 bg-black"
-                >
-                  <div
-                    className="flex items-center justify-center flex-col gap-8 bg-[#18191A] h-[150px] w-[500px] p-4 m-2 rounded-lg"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <p className="text-red-800">
-                      ARE YOU SURE YOU WANT TO DELETE THIS POST
-                    </p>
-                    <div className="flex gap-5 items-center justify-center">
-                      <button
-                        onClick={handlePostDelete}
-                        className="text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800"
-                      >
-                        YES
-                      </button>
-                      <button
-                        onClick={() => {
-                          setDeletePage(false);
-                        }}
-                        className="text-white bg-[#3A3B3C] rounded-lg w-[100px] h-[50px] hover:bg-red-800"
-                      >
-                        NO
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
 
               <p className="flex items-center justify-items-center mb-4 text-white">
                 {post.content}
@@ -213,7 +138,7 @@ export default function Posts(profile) {
               ) : null}
               <div className="flex justify-between p-1 mt-3 border-t-2 border-gray-700">
                 <button
-                  onClick={() => likePost(post._id)}
+                  onClick={() => likePost(post._id)} // Trigger like post mutation with optimistic update
                   className="flex items-center text-red-800 hover:text-red-900"
                 >
                   {post.likedBy.some((id) => id === userId) ? (
@@ -243,4 +168,6 @@ export default function Posts(profile) {
       </div>
     </main>
   );
-}
+};
+
+export default Test;

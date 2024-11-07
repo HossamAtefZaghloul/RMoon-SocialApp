@@ -85,7 +85,7 @@ export default function Messenger({ friendChat, handleToggleFalse }) {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setMessages(res.data); // Initial load of messages
+        setMessages(res.data); 
         return res.data;
       } catch (err) {
         console.error("Error fetching messages:", err);
