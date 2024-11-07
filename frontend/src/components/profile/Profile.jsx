@@ -141,7 +141,7 @@ export default function Profile() {
           </p>
         </div>
         <div>
-          <Posts />
+          <Posts profile = {true} />
         </div>
       </div>
     </div>

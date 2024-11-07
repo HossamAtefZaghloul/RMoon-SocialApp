@@ -94,7 +94,7 @@
   // Post routes
   app.post('/api/posts', upload.single('image'), create_post);
   app.delete('/api/delete/post/:postID', authenticateToken, delete_post);
-  app.get('/api/get/user/posts', authenticateToken, get_user_posts);
+  app.get(`/api/get/user/posts/:profilepage`, authenticateToken, get_user_posts);
   app.post('/api/like/post',authenticateToken ,handleLikes); 
   // WALLPAPER routes
   app.get('/Profile/wallpaper', authenticateToken, get_wallpaper);

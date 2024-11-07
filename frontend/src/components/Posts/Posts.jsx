@@ -6,7 +6,7 @@ import TimeAgo from "../TimeAgo/TimeAgo.jsx";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import jwt_decode from "jwt-decode";
 
-export default function Posts() {
+export default function Posts(profile) {
   const { user } = useContext(UserContext);
   const server = "http://localhost:5000/";
   const [deletePage, setDeletePage] = useState(false);
@@ -16,7 +16,6 @@ export default function Posts() {
   const userId = tokenData.userId;
   const queryClient = useQueryClient(); // Access queryClient
   const [liked, setLiked] = useState(false);
-  const [isLike, setIsLike] = useState("");
 
   const toggleLike = () => setLiked(!liked);
 
@@ -32,7 +31,6 @@ export default function Posts() {
           },
         }
       );
-      setIsLike(response.data.isLiked);
       console.log("Success:", response.data);
       queryClient.invalidateQueries(["userPosts"]);
     } catch (error) {
@@ -48,21 +46,22 @@ export default function Posts() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["userPosts"],
+    queryKey: ["userPosts", profile], // Add profile to queryKey to trigger refetch
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/api/get/user/posts ", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      // console.log("Data fetched:", res.data);
+      const profilepage = profile.profile; 
+      console.log(profilepage)
+      const res = await axios.get(
+        `http://localhost:5000/api/get/user/posts/${profilepage}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     },
-    cacheTime: 5 * 60 * 1000, // Cache data for 5 minutes
-    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
+
   });
-
-  if (isLoading) console.log(isLoading);
-  if (error) console.log(error);
-
+  // if (isLoading) console.log(isLoading);
+  // if (error) console.log(error);
   //
 
   const handlePostDelete = async (e) => {
@@ -86,7 +85,6 @@ export default function Posts() {
       );
     }
   };
-
   return (
     <main className="flex justify-center item w-full h-full">
       <div className="flex flex-col items-center gap-5">
@@ -99,26 +97,30 @@ export default function Posts() {
             >
               <div className="flex items-center mb-4">
                 <img
-                  src={server + (user?.image || "default-avatar.png")}
+                  src={server + (post.user ? post.user.image : user.image)}
                   alt="User Avatar"
                   className="w-[50px] h-[50px] rounded-full mr-3 border-2 border-red-700"
                 />
                 <div className="flex flex-col w-full">
-                  <p className="font-semibold text-white">{user?.username}</p>
+                  <p className="font-semibold text-white">
+                    {post.user ? post.user.username : user.username}
+                  </p>
                   <p className="text-sm text-gray-400">
                     <TimeAgo eventTime={post.timeAgo} />
                   </p>
                 </div>
                 <div className="flex justify-end w-full">
-                  <button
-                    className="text-red-800 text-xl font-mono font-extrabold"
-                    onClick={() => {
-                      setPostID(post._id);
-                      setDeletePage(true);
-                    }}
-                  >
-                    x
-                  </button>
+                  {profile.profile && (
+                    <button
+                      className="text-red-800 text-xl font-mono font-extrabold"
+                      onClick={() => {
+                        setPostID(post._id);
+                        setDeletePage(true);
+                      }}
+                    >
+                      x
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -176,7 +178,7 @@ export default function Posts() {
                     {post.likeCount}
                   </span>
                 </div>
-              ): null}
+              ) : null}
               <div className="flex justify-between p-1 mt-3 border-t-2 border-gray-700">
                 <button
                   onClick={() => handleLikePost(post._id)}
