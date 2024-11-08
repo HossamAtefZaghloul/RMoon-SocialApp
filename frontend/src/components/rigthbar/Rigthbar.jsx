@@ -101,7 +101,7 @@ export default function Rightbar() {
             onClick={() => {
               setToggleChat(false);
             }}
-            className="fixed inset-0 z-[999999] flex justify-end items-end right-[410px] bg-opacity-90 "
+            className=" absolute left-[24px] top-[45%] transform -translate-x-[325px] z-[999999] bg-opacity-90 "
           >
             <div onClick={(e) => e.stopPropagation()}>
               <Messenger 

@@ -52,7 +52,6 @@ export default function Posts(profile) {
     onMutate: async (postid) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries(["userPosts", profile]);
-
       // Snapshot of the previous state
       const previousPosts = queryClient.getQueryData(["userPosts", profile]);
 

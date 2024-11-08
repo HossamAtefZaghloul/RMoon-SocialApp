@@ -37,27 +37,29 @@ export default function Messenger({ friendChat, handleToggleFalse }) {
   // Handle sending messages
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
+  
     const newMessage = {
       sender,
       receiverId,
-      message,
+      content: message,
+      timestamp: new Date().toISOString(),
     };
-
+  
+    // Append the message locally
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setMessage(""); // Clear the input field
+  
     try {
+      // Send message to the server via Socket.IO
       socket.emit("sendMessage", newMessage);
-      setMessage("");
-      refetch();
     } catch (error) {
       console.error("Error sending message via Socket.IO:", error);
-
-      // Fallback to the Axios request in case of Socket.IO error
+  
+      // Fallback to Axios request in case of Socket.IO error
       try {
         await axios.post("http://localhost:5000/Messenger", newMessage, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        setMessage("");
       } catch (fallbackError) {
         console.error("Error sending message via HTTP:", fallbackError);
       }
@@ -74,9 +76,10 @@ export default function Messenger({ friendChat, handleToggleFalse }) {
     return () => {
       socket.off("receiveMessage");
     };
-  }, [receiverId]);
+  }, []);
 
-  const { refetch } = useQuery({
+  const {refetch } = useQuery({
+    queryKey: ['messages', receiverId], // <-- Use an array here for the query key
     queryFn: async () => {
       try {
         const res = await axios.get(
@@ -95,7 +98,7 @@ export default function Messenger({ friendChat, handleToggleFalse }) {
   });
 
   return (
-    <div className="w-[300px] h-[350px] top-[50px] bg-[#18191A] border border-gray-700 rounded-t-lg shadow-lg flex flex-col">
+    <div className="w-[300px] h-[350px]  bg-[#18191A] border border-gray-700 rounded-t-lg shadow-lg flex flex-col">
       <div className="flex justify-between items-center p-3 border-b border-gray-800">
         <div className="flex items-center gap-3">
           <img
