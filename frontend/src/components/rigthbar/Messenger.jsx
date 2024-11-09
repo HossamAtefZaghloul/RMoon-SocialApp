@@ -47,7 +47,7 @@ export default function Messenger({ friendChat, handleToggleFalse }) {
   
     // Append the message locally
     setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setMessage(""); // Clear the input field
+    setMessage(""); 
   
     try {
       // Send message to the server via Socket.IO
@@ -55,7 +55,7 @@ export default function Messenger({ friendChat, handleToggleFalse }) {
     } catch (error) {
       console.error("Error sending message via Socket.IO:", error);
   
-      // Fallback to Axios request in case of Socket.IO error
+      //back to Axios in case of Socket error
       try {
         await axios.post("http://localhost:5000/Messenger", newMessage, {
           headers: { Authorization: `Bearer ${token}` },
