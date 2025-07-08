@@ -63,7 +63,7 @@ cd frontend
 npm run dev
 
 Features
- User Authentication (JWT + Cookies)
+ User Authentication (JWT)
 
  MongoDB with Mongoose
 
